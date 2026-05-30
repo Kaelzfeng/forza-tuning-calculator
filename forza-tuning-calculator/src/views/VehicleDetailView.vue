@@ -65,6 +65,7 @@ async function findInLocalJson(targetSlug) {
       const candidate = v.slug || generateSlug(v.manufacturer, v.name, v.year)
       if (candidate === targetSlug) {
         return {
+          id: candidate,
           slug: candidate,
           name: v.name || '',
           manufacturer: v.manufacturer || '',
