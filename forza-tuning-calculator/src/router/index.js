@@ -5,7 +5,7 @@ import CalculatorView from '../views/CalculatorView.vue'
 const routes = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/calculator', name: 'calculator', component: CalculatorView },
-  { path: '/tunes', name: 'tune-feed', component: () => import('../views/TuneFeedView.vue') },
+  { path: '/tunes', name: 'tune-feed', component: () => import('../views/TunesView.vue') },
   { path: '/tunes/:slug', name: 'tune-detail', component: () => import('../views/PublicTuneView.vue') },
   { path: '/vehicles', name: 'vehicle-list', component: () => import('../views/VehiclesView.vue') },
   { path: '/vehicles/:slug', name: 'vehicle-detail', component: () => import('../views/VehicleDetailView.vue') },

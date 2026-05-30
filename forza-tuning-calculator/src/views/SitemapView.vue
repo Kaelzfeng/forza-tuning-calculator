@@ -94,6 +94,6 @@ onMounted(() => {
   <div v-if="error" style="padding:20px;font-family:monospace;color:#b85b5b;">
     Sitemap generation failed.
   </div>
-  <pre v-else-if="xml" v-text="xml" style="white-space:pre-wrap;word-break:break-all;padding:20px;font-family:monospace;font-size:13px;color:#334155;"></pre>
-  <div v-else style="padding:20px;font-family:monospace;color:#8b95a1;">Generating sitemap...</div>
+  <pre v-else-if="xml" v-text="xml" style="white-space:pre-wrap;word-break:break-all;padding:20px;font-family:monospace;font-size:13px;color:#222222;"></pre>
+  <div v-else style="padding:20px;font-family:monospace;color:#333333;">Generating sitemap...</div>
 </template>

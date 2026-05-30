@@ -299,3 +299,24 @@ export async function getPublicTuneBySlug(slug) {
   if (error) return null
   return data
 }
+
+export async function getPublicTunes({ limit = 24, search = '' } = {}) {
+  if (!supabase) return []
+
+  let query = supabase
+    .from('tunes')
+    .select('*')
+    .eq('is_public', true)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (search.trim()) {
+    const term = `%${search.trim()}%`
+    query = query.or(`title.ilike.${term},vehicle_name.ilike.${term}`)
+  }
+
+  const { data, error } = await withTimeout(query, 15000, 'getPublicTunes')
+
+  if (error) throw new Error(error.message)
+  return data || []
+}

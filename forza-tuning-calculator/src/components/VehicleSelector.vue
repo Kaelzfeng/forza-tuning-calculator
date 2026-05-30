@@ -131,14 +131,14 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .vs-label-text {
   font-size: 0.72rem;
   font-weight: 600;
-  color: #334155;
+  color: #222222;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 .vs-optional {
   font-weight: 500;
-  color: #8b95a1;
+  color: #333333;
   text-transform: none;
 }
 
@@ -153,7 +153,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 }
 
 .vs-selected-name {
-  color: #0f1720;
+  color: #111111;
   font-weight: 550;
 }
 
@@ -164,7 +164,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8b95a1;
+  color: #333333;
   cursor: pointer;
   background: transparent;
   border: none;
@@ -185,7 +185,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   padding: 10px 14px;
   border-radius: 12px;
   font-size: 0.88rem;
-  color: #2d3748;
+  color: #222222;
   font-family: inherit;
   width: 100%;
 }
@@ -195,7 +195,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #8b95a1;
+  color: #333333;
   animation: vs-spin 0.9s linear infinite;
 }
 
@@ -242,20 +242,20 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .vs-option-name {
   font-size: 0.82rem;
   font-weight: 600;
-  color: #0f1720;
+  color: #111111;
 }
 
 .vs-option-mfr {
   font-size: 0.65rem;
   font-weight: 500;
-  color: #7b8ea0;
+  color: #333333;
 }
 
 .vs-no-results {
   padding: 12px;
   text-align: center;
   font-size: 0.78rem;
-  color: #7b8ea0;
+  color: #333333;
   font-weight: 500;
 }
 </style>
