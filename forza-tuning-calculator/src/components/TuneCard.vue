@@ -58,8 +58,10 @@ function formatDate(iso) {
 }
 
 .tune-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transform: translateY(-4px);
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.5);
 }
 
 .tc-top {

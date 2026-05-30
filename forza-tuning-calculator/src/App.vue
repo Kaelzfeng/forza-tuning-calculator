@@ -3,6 +3,7 @@ import { useRoute } from 'vue-router'
 import AuthButton from './components/AuthButton.vue'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
 import UpgradeProButton from './components/UpgradeProButton.vue'
+import AppToast from './components/AppToast.vue'
 import { useI18n } from './i18n/index.js'
 
 const route = useRoute()
@@ -48,6 +49,8 @@ const { t } = useI18n()
     <main class="main-content">
       <router-view />
     </main>
+
+    <AppToast />
 
     <footer class="footer">
       <div class="footer-inner liquid-panel">
@@ -139,7 +142,7 @@ const { t } = useI18n()
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   position: relative;
   z-index: 2;
 }

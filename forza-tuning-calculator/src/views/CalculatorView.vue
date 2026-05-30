@@ -10,11 +10,13 @@ import { getPresets } from '../lib/presetsApi.js'
 import PublishDialog from '../components/PublishDialog.vue'
 import SubscriptionModal from '../components/SubscriptionModal.vue'
 import { useI18n } from '../i18n/index.js'
+import { useToast } from '../composables/useToast.js'
 
 const route = useRoute()
 const router = useRouter()
 const { t, currentLang } = useI18n()
 const { isPro } = useProAccess()
+const { success, error: toastError } = useToast()
 
 const form = reactive({
   drivetrain: 'RWD',
@@ -304,11 +306,13 @@ function handleImportFile(e) {
       if (data.tune_data?.step2Intent) step2Intent.value = data.tune_data.step2Intent
 
       importStatus.value = 'success'
-      setTimeout(() => { importStatus.value = '' }, 2500)
+      setTimeout(() => { importStatus.value = '' }, 1500)
+      success('Tune imported')
     } catch (err) {
       console.error('Import failed:', err)
       importStatus.value = 'error'
       setTimeout(() => { importStatus.value = '' }, 3000)
+      toastError('Import failed')
     }
   }
   reader.readAsText(file)
@@ -330,10 +334,12 @@ function shareTune() {
   const url = `${window.location.origin}/tunes/${lastSavedSlug.value}`
   navigator.clipboard.writeText(url).then(() => {
     copiedShare.value = true
-    setTimeout(() => { copiedShare.value = false }, 2000)
+    success('Share link copied')
+    setTimeout(() => { copiedShare.value = false }, 1500)
   }).catch(() => {
     copiedShare.value = true
-    setTimeout(() => { copiedShare.value = false }, 2000)
+    success('Share link copied')
+    setTimeout(() => { copiedShare.value = false }, 1500)
   })
 }
 
@@ -552,7 +558,8 @@ async function saveCurrentBuild() {
   savedBuilds.value = [build, ...savedBuilds.value].slice(0, MAX_SAVES)
   persistSaves()
   saveStatus.value = editingTuneId.value ? 'updated' : 'build'
-  setTimeout(() => { saveStatus.value = '' }, 1800)
+  success(editingTuneId.value ? 'Build updated' : 'Build saved')
+  setTimeout(() => { saveStatus.value = '' }, 1500)
   editingTuneId.value = null
 }
 
@@ -650,14 +657,16 @@ function copySteps() {
   const text = formatApplyStepsText(applySteps.value)
   navigator.clipboard.writeText(text).then(() => {
     copiedSteps.value = true
-    setTimeout(() => { copiedSteps.value = false }, 2000)
+    success('Apply steps copied')
+    setTimeout(() => { copiedSteps.value = false }, 1500)
   }).catch(() => {
     const ta = document.createElement('textarea'); ta.value = text
     ta.style.position = 'fixed'; ta.style.opacity = '0'
     document.body.appendChild(ta); ta.select()
     document.execCommand('copy'); document.body.removeChild(ta)
     copiedSteps.value = true
-    setTimeout(() => { copiedSteps.value = false }, 2000)
+    success('Apply steps copied')
+    setTimeout(() => { copiedSteps.value = false }, 1500)
   })
 }
 
@@ -665,14 +674,16 @@ function copyTune() {
   const text = formatTuneText(result.value, { ...form })
   navigator.clipboard.writeText(text).then(() => {
     copied.value = true
-    setTimeout(() => { copied.value = false }, 2000)
+    success('Tune copied')
+    setTimeout(() => { copied.value = false }, 1500)
   }).catch(() => {
     const ta = document.createElement('textarea'); ta.value = text
     ta.style.position = 'fixed'; ta.style.opacity = '0'
     document.body.appendChild(ta); ta.select()
     document.execCommand('copy'); document.body.removeChild(ta)
     copied.value = true
-    setTimeout(() => { copied.value = false }, 2000)
+    success('Tune copied')
+    setTimeout(() => { copied.value = false }, 1500)
   })
 }
 
@@ -882,11 +893,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
             <span class="panel-subtitle">{{ t('calculator.realtimeCalc') }}</span>
           </div>
           <div class="actions-row">
-            <button class="btn-preset" @click="openPresetModal">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-                <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
-              </svg>
+            <button class="btn-secondary" @click="openPresetModal">
               {{ appliedPresetTitle ? `Preset: ${appliedPresetTitle}` : 'Apply Preset' }}
             </button>
             <input
@@ -896,38 +903,18 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
               class="import-file-input"
               @change="handleImportFile"
             />
-            <button class="btn-import" @click="triggerImport">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" />
-              </svg>
-              {{ importStatus === 'success' ? 'Imported successfully' : importStatus === 'error' ? 'Import failed' : 'Import Tune' }}
+            <button class="btn-secondary" @click="triggerImport">
+              {{ importStatus === 'success' ? 'Imported' : importStatus === 'error' ? 'Import failed' : 'Import Tune' }}
             </button>
-            <button class="btn-copy" @click="isPro ? copyTune() : openProModal('Copy tune values to clipboard')">
-              <svg v-if="!copied" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-              </svg>
-              <svg v-else width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              {{ copied ? t('calculator.copied') : t('calculator.copyTune') }}
+            <button class="btn-secondary" @click="isPro ? copyTune() : openProModal('Copy tune values to clipboard')">
+              {{ copied ? 'Copied' : 'Copy Tune' }}
             </button>
-            <button class="btn-share" @click="shareTune">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="18" cy="5" r="3" />
-                <circle cx="6" cy="12" r="3" />
-                <circle cx="18" cy="19" r="3" />
-                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-              </svg>
-              {{ copiedShare ? t('calculator.copiedLink') : t('calculator.shareTune') }}
+            <button class="btn-secondary" @click="shareTune">
+              {{ copiedShare ? 'Shared' : 'Share' }}
             </button>
             <span v-if="shareHint" class="share-hint">{{ shareHint }}</span>
-            <button class="btn-save" @click="isPro ? saveCurrentBuild() : openProModal('Save your tune builds to the cloud')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-              </svg>
-              {{ saveStatus === 'build' ? t('calculator.saved') : saveStatus === 'updated' ? t('calculator.updated') || 'Updated' : editingTuneId ? t('calculator.updateBuild') || 'Update Build' : t('calculator.saveBuild') }}
+            <button class="btn-primary" @click="isPro ? saveCurrentBuild() : openProModal('Save your tune builds to the cloud')">
+              {{ saveStatus === 'build' ? 'Saved' : saveStatus === 'updated' ? 'Updated' : editingTuneId ? 'Update Build' : 'Save Build' }}
             </button>
           </div>
         </div>
@@ -1145,7 +1132,13 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
               >
                 <span class="preset-card-title">{{ p.title }}</span>
                 <span class="preset-card-desc">{{ p.description }}</span>
-                <span v-if="!isPro && p.slug !== 'balanced-road'" class="preset-pro-badge">Pro</span>
+                <span v-if="!isPro && p.slug !== 'balanced-road'" class="preset-pro-badge">PRO</span>
+                <div v-if="!isPro && p.slug !== 'balanced-road'" class="preset-lock-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </div>
               </button>
             </div>
             <button class="preset-cancel" @click="showPresetModal = false">Cancel</button>
@@ -1564,66 +1557,6 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   margin-top: 2px;
 }
 
-/* ── Copy button ── */
-.btn-copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 16px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  min-width: 110px;
-  justify-content: center;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #4a6b85;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -1px 0 rgba(80, 110, 150, 0.04);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  z-index: 2;
-}
-
-.btn-copy:hover {
-  color: #3d5c73;
-  background: rgba(255, 255, 255, 0.42);
-  box-shadow: 0 2px 12px rgba(91, 122, 154, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.65), inset 0 -1px 0 rgba(80, 110, 150, 0.05);
-  transform: translateY(-1px);
-}
-
-.btn-share {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  min-width: 110px;
-  justify-content: center;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #5b7a9a;
-  background: rgba(91, 122, 154, 0.07);
-  border: 1px solid rgba(91, 122, 154, 0.16);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  z-index: 2;
-}
-
-.btn-share:hover {
-  background: rgba(91, 122, 154, 0.14);
-  border-color: rgba(91, 122, 154, 0.28);
-  color: #3d5c73;
-  transform: translateY(-1px);
-}
-
 .share-hint {
   font-size: 0.72rem;
   font-weight: 550;
@@ -1635,65 +1568,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   white-space: nowrap;
 }
 
-/* ── Preset Button ── */
-.btn-preset {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 16px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  min-width: 110px;
-  justify-content: center;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  font-family: inherit;
-  color: #5b8a6a;
-  background: rgba(91, 138, 106, 0.08);
-  border: 1px solid rgba(91, 138, 106, 0.18);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-preset:hover {
-  background: rgba(91, 138, 106, 0.14);
-  border-color: rgba(91, 138, 106, 0.28);
-  color: #3d6a4a;
-  transform: translateY(-1px);
-}
-
-/* ── Import Button ── */
-.import-file-input {
-  display: none;
-}
-
-.btn-import {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 16px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  min-width: 110px;
-  justify-content: center;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  font-family: inherit;
-  color: #6b7d92;
-  background: rgba(107, 125, 146, 0.06);
-  border: 1px solid rgba(107, 125, 146, 0.14);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-import:hover {
-  background: rgba(107, 125, 146, 0.14);
-  border-color: rgba(107, 125, 146, 0.24);
-  color: #4a5d6a;
-  transform: translateY(-1px);
-}
+.import-file-input { display: none; }
 
 /* ── Preset Modal ── */
 .preset-overlay {
@@ -1763,8 +1638,13 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .preset-card:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.32);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.34);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.preset-card:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .preset-card-title {
@@ -1778,25 +1658,40 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   font-weight: 480;
   color: #556677;
   line-height: 1.4;
+  padding-right: 40px;
 }
 
 .preset-locked {
   opacity: 0.5;
   cursor: not-allowed;
+  filter: blur(0.6px);
+}
+
+.preset-locked:hover {
+  transform: none !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+}
+
+.preset-lock-icon {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  color: #8b95a1;
+  pointer-events: none;
 }
 
 .preset-pro-badge {
   position: absolute;
   top: 10px;
   right: 14px;
-  font-size: 0.58rem;
+  font-size: 0.56rem;
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 8px;
   color: #4a6b85;
   background: rgba(91, 122, 154, 0.1);
   border: 1px solid rgba(91, 122, 154, 0.2);
-  text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
@@ -1998,34 +1893,6 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   color: #4a5568;
   font-weight: 520;
   line-height: 1.5;
-}
-
-.btn-save {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  min-width: 120px;
-  justify-content: center;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #7b6a9a;
-  background: rgba(123, 106, 154, 0.07);
-  border: 1px solid rgba(123, 106, 154, 0.16);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  z-index: 2;
-}
-
-.btn-save:hover {
-  background: rgba(123, 106, 154, 0.14);
-  border-color: rgba(123, 106, 154, 0.28);
-  color: #5a4a73;
-  transform: translateY(-1px);
 }
 
 /* ── Saved Builds ── */

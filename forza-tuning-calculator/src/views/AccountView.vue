@@ -164,7 +164,8 @@ watch(user, (u) => {
             />
             <div v-if="loginError" class="login-error">{{ loginError }}</div>
             <button
-              class="login-btn btn-glass"
+              class="btn-primary"
+              style="width:100%;justify-content:center;"
               :disabled="sending"
               @click="handleSendLink"
             >
@@ -250,7 +251,7 @@ watch(user, (u) => {
 
             <button
               v-if="!isPro"
-              class="upgrade-btn btn-glass"
+              class="btn-primary" style="width:100%;justify-content:center;"
               @click="router.push('/upgrade')"
             >
               Upgrade Pro
@@ -482,15 +483,6 @@ watch(user, (u) => {
   color: #6b7d92;
 }
 
-/* ── Upgrade button ── */
-.upgrade-btn {
-  width: 100%;
-  justify-content: center;
-  padding: 13px 24px;
-  border-radius: 14px;
-  font-size: 0.9rem;
-}
-
 /* ── Preview cards ── */
 .preview-list {
   display: flex;
@@ -564,20 +556,6 @@ watch(user, (u) => {
   border-radius: 10px;
   background: rgba(184, 91, 91, 0.06);
   border: 1px solid rgba(184, 91, 91, 0.14);
-}
-
-.login-btn {
-  width: 100%;
-  justify-content: center;
-  padding: 13px 24px;
-  border-radius: 14px;
-  font-size: 0.9rem;
-}
-
-.login-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
-  transform: none;
 }
 
 .login-sent {

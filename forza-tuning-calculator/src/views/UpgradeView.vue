@@ -81,11 +81,7 @@ async function handleUpgrade() {
             </li>
           </ul>
 
-          <button
-            v-if="!isPro"
-            class="upgrade-btn btn-glass"
-            @click="handleUpgrade"
-          >
+          <button v-if="!isPro" class="btn-primary" style="width:100%;justify-content:center;" @click="handleUpgrade">
             Upgrade Now
           </button>
 
@@ -93,7 +89,7 @@ async function handleUpgrade() {
 
           <div v-if="isPro" class="pro-active-section">
             <p class="pro-active-text">Your Pro membership is active</p>
-            <button class="upgrade-btn btn-glass" disabled>
+            <button class="btn-primary" style="width:100%;justify-content:center;" disabled>
               Pro Active
             </button>
           </div>
@@ -225,21 +221,6 @@ async function handleUpgrade() {
 .feature-check {
   flex-shrink: 0;
   color: #4a6b85;
-}
-
-.upgrade-btn {
-  width: 100%;
-  justify-content: center;
-  padding: 14px 24px;
-  border-radius: 14px;
-  font-size: 0.92rem;
-}
-
-.upgrade-btn:disabled {
-  opacity: 0.55;
-  cursor: default;
-  transform: none;
-  filter: none;
 }
 
 .checkout-error {

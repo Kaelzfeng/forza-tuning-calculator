@@ -6,10 +6,24 @@
   padding: 0;
 }
 
+:root {
+  --radius-card: 20px;
+  --radius-inner: 16px;
+  --radius-btn: 12px;
+  --color-primary: #4a6b85;
+  --color-primary-hover: #2d4a63;
+  --color-success: #3d6a4a;
+  --color-danger: #b85b5b;
+  --motion-fast: 200ms ease;
+  --btn-height: 44px;
+  --input-height: 44px;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 /*
@@ -101,6 +115,96 @@ svg {
   display: block;
   max-width: 100%;
 }
+
+/* ── Unified inputs ── */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="url"],
+input[type="search"],
+select,
+textarea {
+  min-height: var(--input-height);
+  padding: 0 14px;
+  border-radius: var(--radius-inner);
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: #2d3748;
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(80, 110, 150, 0.04);
+  outline: none;
+  transition: border-color var(--motion-fast), box-shadow var(--motion-fast), background var(--motion-fast);
+  box-sizing: border-box;
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="number"]:hover,
+input[type="password"]:hover,
+input[type="url"]:hover,
+input[type="search"]:hover,
+select:hover,
+textarea:hover {
+  background: rgba(255, 255, 255, 0.35);
+  border-color: rgba(140, 160, 185, 0.45);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(74, 107, 133, 0.48);
+  box-shadow:
+    0 0 0 3px rgba(74, 107, 133, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.52);
+  background: rgba(255, 255, 255, 0.42);
+}
+
+textarea {
+  padding: 12px 14px;
+  min-height: 80px;
+  resize: vertical;
+}
+
+select {
+  appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a6b85' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+
+/* ── Unified badges ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge-pro     { color: #3d6a4a; background: rgba(91, 138, 106, 0.1);  border: 1px solid rgba(91, 138, 106, 0.2);  }
+.badge-public  { color: #3d6a4a; background: rgba(91, 138, 106, 0.1);  border: 1px solid rgba(91, 138, 106, 0.2);  }
+.badge-private { color: #8b6a4a; background: rgba(194, 154, 74, 0.1);  border: 1px solid rgba(194, 154, 74, 0.18); }
+.badge-draft   { color: #6b7d92; background: rgba(107, 125, 146, 0.08); border: 1px solid rgba(107, 125, 146, 0.14); }
+.badge-tag     { color: #334155; background: rgba(255, 255, 255, 0.3);  border: 1px solid rgba(255, 255, 255, 0.35); }
 
 /* ── Disable fixed attachment on mobile for performance ── */
 @media (max-width: 768px) {

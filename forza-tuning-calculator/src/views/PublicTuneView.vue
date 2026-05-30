@@ -5,10 +5,12 @@ import { useAuth } from '../composables/useAuth.js'
 import { useSeoMeta } from '../composables/useSeoMeta.js'
 import { getPublicTuneBySlug } from '../lib/tunesApi.js'
 import { exportTuneToJson } from '../utils/tuneExport.js'
+import { useToast } from '../composables/useToast.js'
 
 const route = useRoute()
 const router = useRouter()
 const { user } = useAuth()
+const { success } = useToast()
 
 const tune = ref(null)
 const loading = ref(true)
@@ -115,14 +117,16 @@ function copyTune() {
   const text = lines.join('\n')
   navigator.clipboard.writeText(text).then(() => {
     copiedTune.value = true
-    setTimeout(() => { copiedTune.value = false }, 2000)
+    success('Tune copied')
+    setTimeout(() => { copiedTune.value = false }, 1500)
   }).catch(() => {
     const ta = document.createElement('textarea'); ta.value = text
     ta.style.position = 'fixed'; ta.style.opacity = '0'
     document.body.appendChild(ta); ta.select()
     document.execCommand('copy'); document.body.removeChild(ta)
     copiedTune.value = true
-    setTimeout(() => { copiedTune.value = false }, 2000)
+    success('Tune copied')
+    setTimeout(() => { copiedTune.value = false }, 1500)
   })
 }
 
@@ -138,14 +142,16 @@ function copyLink() {
   const url = window.location.href
   navigator.clipboard.writeText(url).then(() => {
     copiedLink.value = true
-    setTimeout(() => { copiedLink.value = false }, 2000)
+    success('Share link copied')
+    setTimeout(() => { copiedLink.value = false }, 1500)
   }).catch(() => {
     const ta = document.createElement('textarea'); ta.value = url
     ta.style.position = 'fixed'; ta.style.opacity = '0'
     document.body.appendChild(ta); ta.select()
     document.execCommand('copy'); document.body.removeChild(ta)
     copiedLink.value = true
-    setTimeout(() => { copiedLink.value = false }, 2000)
+    success('Share link copied')
+    setTimeout(() => { copiedLink.value = false }, 1500)
   })
 }
 
@@ -164,13 +170,15 @@ function handleExport() {
 
 <template>
   <div class="public-tune">
-    <!-- Loading -->
+    <!-- Loading skeleton -->
     <div v-if="loading" class="pt-state">
-      <div class="pt-state-card liquid-panel">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="pt-spinner">
-          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-        </svg>
-        <span class="pt-state-text">Loading...</span>
+      <div class="pt-state-card liquid-panel" style="width:100%;max-width:500px;">
+        <div class="skeleton-lines">
+          <div class="skeleton-line w-60"></div>
+          <div class="skeleton-line w-40"></div>
+          <div class="skeleton-line w-80"></div>
+          <div class="skeleton-line w-50"></div>
+        </div>
       </div>
     </div>
 
@@ -249,38 +257,15 @@ function handleExport() {
 
       <!-- Actions -->
       <div class="pt-actions">
-        <button class="pt-btn btn-glass" @click="copyTune">
-          <svg v-if="!copiedTune" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-          </svg>
-          <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
+        <button class="btn-secondary" @click="copyTune">
           {{ copiedTune ? 'Copied' : 'Copy Tune' }}
         </button>
-        <button class="pt-btn pt-btn-share" @click="copyLink">
-          <svg v-if="!copiedLink" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-          </svg>
-          <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
+        <button class="btn-secondary" @click="copyLink">
           {{ copiedLink ? 'Copied' : 'Copy Link' }}
         </button>
         <span v-if="copyLinkHint" class="pt-copy-hint">{{ copyLinkHint }}</span>
-        <button class="pt-btn pt-btn-export" @click="handleExport">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          Export JSON
-        </button>
-        <button v-if="isAuthor" class="pt-btn pt-btn-calc" @click="openInCalculator">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
-            <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
-          </svg>
+        <button class="btn-secondary" @click="handleExport">Export JSON</button>
+        <button v-if="isAuthor" class="btn-primary" @click="openInCalculator">
           Open in Calculator
         </button>
       </div>
@@ -335,12 +320,6 @@ function handleExport() {
   font-weight: 680;
   color: #0f1720;
   margin: 0;
-}
-
-.pt-state-text {
-  font-size: 0.9rem;
-  font-weight: 550;
-  color: #4a6b85;
 }
 
 .pt-state-desc {
@@ -522,53 +501,6 @@ function handleExport() {
   flex-wrap: wrap;
 }
 
-.pt-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 12px 22px;
-  border-radius: 14px;
-  font-size: 0.85rem;
-  font-weight: 620;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.pt-btn-share {
-  color: #5b7a9a;
-  background: rgba(91, 122, 154, 0.06);
-  border: 1px solid rgba(91, 122, 154, 0.14);
-}
-
-.pt-btn-share:hover {
-  background: rgba(91, 122, 154, 0.14);
-  color: #3d5c73;
-}
-
-.pt-btn-calc {
-  color: #5b8a6a;
-  background: rgba(91, 138, 106, 0.06);
-  border: 1px solid rgba(91, 138, 106, 0.14);
-}
-
-.pt-btn-calc:hover {
-  background: rgba(91, 138, 106, 0.14);
-  color: #3d6a4a;
-}
-
-.pt-btn-export {
-  color: #6b8a5b;
-  background: rgba(107, 138, 91, 0.06);
-  border: 1px solid rgba(107, 138, 91, 0.14);
-}
-
-.pt-btn-export:hover {
-  background: rgba(107, 138, 91, 0.14);
-  color: #4a6a3a;
-}
-
 .pt-copy-hint {
   font-size: 0.74rem;
   font-weight: 550;
@@ -578,6 +510,31 @@ function handleExport() {
   background: rgba(194, 120, 74, 0.06);
   border: 1px solid rgba(194, 120, 74, 0.14);
   line-height: 1.4;
+}
+
+/* ── Skeleton ── */
+.skeleton-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 7px;
+  background: rgba(139, 149, 161, 0.2);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.skeleton-line.w-60 { width: 60%; }
+.skeleton-line.w-40 { width: 40%; }
+.skeleton-line.w-80 { width: 80%; }
+.skeleton-line.w-50 { width: 50%; }
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
 }
 
 @media (max-width: 640px) {

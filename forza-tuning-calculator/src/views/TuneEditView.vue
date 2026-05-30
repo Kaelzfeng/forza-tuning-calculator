@@ -156,7 +156,7 @@ watch([authLoading, user], ([al, u]) => {
 <template>
   <div class="edit-page">
     <div class="edit-header">
-      <button class="back-btn" @click="router.push('/account/tunes')">
+      <button class="btn-secondary" @click="router.push('/account/tunes')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
         </svg>
@@ -175,7 +175,7 @@ watch([authLoading, user], ([al, u]) => {
     <div v-else-if="notFound" class="edit-container liquid-panel">
       <div class="edit-content state-center">
         <p class="state-text">Tune not found.</p>
-        <button class="state-btn btn-glass" @click="router.push('/account/tunes')">Back to My Tunes</button>
+        <button class="btn-primary" @click="router.push('/account/tunes')">Back to My Tunes</button>
       </div>
     </div>
 
@@ -183,7 +183,7 @@ watch([authLoading, user], ([al, u]) => {
     <div v-else-if="accessDenied" class="edit-container liquid-panel">
       <div class="edit-content state-center">
         <p class="state-text">Access denied &mdash; you can only edit your own tunes.</p>
-        <button class="state-btn btn-glass" @click="router.push('/account/tunes')">Back to My Tunes</button>
+        <button class="btn-primary" @click="router.push('/account/tunes')">Back to My Tunes</button>
       </div>
     </div>
 
@@ -191,7 +191,7 @@ watch([authLoading, user], ([al, u]) => {
     <div v-else-if="loadError" class="edit-container liquid-panel">
       <div class="edit-content state-center">
         <p class="state-text">{{ loadError }}</p>
-        <button class="state-btn btn-glass" @click="loadTune">Retry</button>
+        <button class="btn-primary" @click="loadTune">Retry</button>
       </div>
     </div>
 
@@ -259,7 +259,7 @@ watch([authLoading, user], ([al, u]) => {
 
         <!-- Save -->
         <div v-if="saveError" class="save-error">{{ saveError }}</div>
-        <button type="submit" class="save-btn btn-glass" :disabled="saving">
+        <button type="submit" class="btn-primary" :disabled="saving">
           {{ saving ? 'Saving...' : 'Save Changes' }}
         </button>
       </form>
@@ -281,27 +281,6 @@ watch([authLoading, user], ([al, u]) => {
 .edit-header {
   width: 100%;
   max-width: 640px;
-}
-
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #4a6b85;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s ease;
-}
-
-.back-btn:hover {
-  background: rgba(255, 255, 255, 0.35);
-  color: #2d4a63;
 }
 
 /* ── Container ── */
@@ -330,13 +309,6 @@ watch([authLoading, user], ([al, u]) => {
   color: #8b95a1;
   font-weight: 500;
   margin: 0;
-}
-
-.state-btn {
-  padding: 12px 28px;
-  border-radius: 14px;
-  font-size: 0.88rem;
-  display: inline-flex;
 }
 
 /* ── Toast ── */
@@ -498,20 +470,6 @@ watch([authLoading, user], ([al, u]) => {
   border-radius: 12px;
   background: rgba(184, 91, 91, 0.06);
   border: 1px solid rgba(184, 91, 91, 0.14);
-}
-
-.save-btn {
-  width: 100%;
-  justify-content: center;
-  padding: 14px 24px;
-  border-radius: 14px;
-  font-size: 0.9rem;
-}
-
-.save-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
-  transform: none;
 }
 
 @media (max-width: 640px) {

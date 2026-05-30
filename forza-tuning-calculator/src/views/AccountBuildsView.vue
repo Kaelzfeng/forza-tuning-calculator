@@ -155,7 +155,8 @@ watch(user, (u) => {
             />
             <div v-if="loginError" class="login-error">{{ loginError }}</div>
             <button
-              class="login-btn btn-glass"
+              class="btn-primary"
+              style="width:100%;justify-content:center;"
               :disabled="sending"
               @click="handleSendLink"
             >
@@ -185,7 +186,7 @@ watch(user, (u) => {
       <div v-if="error" class="builds-container liquid-panel">
         <div class="builds-content state-center">
           <p class="state-text">Unable to load saved builds</p>
-          <button class="state-btn btn-glass" @click="loadBuilds">Retry</button>
+          <button class="btn-primary" @click="loadBuilds">Retry</button>
         </div>
       </div>
 
@@ -200,7 +201,7 @@ watch(user, (u) => {
       <div v-else-if="builds.length === 0" class="builds-container liquid-panel">
         <div class="builds-content state-center">
           <p class="state-text">No saved builds yet</p>
-          <button class="state-btn btn-glass" @click="router.push('/calculator')">
+          <button class="btn-primary" @click="router.push('/calculator')">
             Go To Calculator
           </button>
         </div>
@@ -217,10 +218,10 @@ watch(user, (u) => {
             </div>
 
             <div class="build-actions">
-              <button class="build-btn build-btn-open liquid-glass" @click="openBuild">
+              <button class="btn-secondary" @click="openBuild">
                 Open
               </button>
-              <button class="build-btn build-btn-delete" @click="confirmDelete(b)">
+              <button class="btn-danger" @click="confirmDelete(b)">
                 Delete
               </button>
             </div>
@@ -245,7 +246,7 @@ watch(user, (u) => {
           <p class="confirm-text">Delete this saved build?</p>
           <div class="confirm-actions">
             <button class="confirm-cancel" @click="cancelDelete">Cancel</button>
-            <button class="confirm-delete btn-glass" @click="executeDelete">Delete</button>
+            <button class="btn-danger" @click="executeDelete">Delete</button>
           </div>
         </div>
       </div>
@@ -315,13 +316,6 @@ watch(user, (u) => {
   margin: 0;
 }
 
-.state-btn {
-  padding: 12px 28px;
-  border-radius: 14px;
-  font-size: 0.88rem;
-  display: inline-flex;
-}
-
 /* ── Build list ── */
 .builds-list {
   width: 100%;
@@ -380,39 +374,6 @@ watch(user, (u) => {
   flex-shrink: 0;
 }
 
-.build-btn {
-  padding: 7px 16px;
-  border-radius: 10px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.build-btn-open {
-  color: #4a6b85;
-  border: 1px solid rgba(74, 107, 133, 0.14);
-  background: rgba(255, 255, 255, 0.28);
-}
-
-.build-btn-open:hover {
-  background: rgba(255, 255, 255, 0.42);
-  color: #2d4a63;
-}
-
-.build-btn-delete {
-  color: #b85b5b;
-  background: rgba(184, 91, 91, 0.06);
-  border: 1px solid rgba(184, 91, 91, 0.1);
-}
-
-.build-btn-delete:hover {
-  background: rgba(184, 91, 91, 0.12);
-  color: #9a3e3e;
-}
-
 /* ── Login form ── */
 .login-form {
   display: flex;
@@ -437,20 +398,6 @@ watch(user, (u) => {
   border-radius: 10px;
   background: rgba(184, 91, 91, 0.06);
   border: 1px solid rgba(184, 91, 91, 0.14);
-}
-
-.login-btn {
-  width: 100%;
-  justify-content: center;
-  padding: 13px 24px;
-  border-radius: 14px;
-  font-size: 0.9rem;
-}
-
-.login-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
-  transform: none;
 }
 
 .login-sent {
@@ -525,13 +472,6 @@ watch(user, (u) => {
   color: #334155;
 }
 
-.confirm-delete {
-  padding: 9px 22px;
-  border-radius: 10px;
-  font-size: 0.8rem;
-  background: linear-gradient(180deg, #c46b6b 0%, #a84e4e 50%, #8b3a3a 100%);
-}
-
 @media (max-width: 640px) {
   .builds-page {
     padding: 16px;
@@ -562,13 +502,6 @@ watch(user, (u) => {
 
   .build-actions {
     width: 100%;
-  }
-
-  .build-btn {
-    flex: 1;
-    text-align: center;
-    justify-content: center;
-    padding: 10px 16px;
   }
 }
 </style>

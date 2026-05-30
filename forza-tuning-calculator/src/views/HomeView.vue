@@ -44,7 +44,7 @@ function goToCalculator(mode) {
       </div>
       <h1 class="hero-title">{{ t('home.title') }}</h1>
       <p class="hero-subtitle">{{ t('home.subtitle') }}</p>
-      <button class="hero-btn btn-glass" @click="goToCalculator('road')">
+      <button class="btn-primary" style="font-size:0.95rem; padding:0 32px;" @click="goToCalculator('road')">
         <span>{{ t('home.startTuning') }}</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
@@ -140,14 +140,6 @@ function goToCalculator(mode) {
   color: #1f2937;
   max-width: 420px;
   margin: 0;
-  position: relative;
-  z-index: 2;
-}
-
-.hero-btn {
-  padding: 15px 36px;
-  border-radius: 16px;
-  font-size: 0.95rem;
   position: relative;
   z-index: 2;
 }
@@ -291,12 +283,6 @@ function goToCalculator(mode) {
 
   .hero-subtitle {
     font-size: 1rem;
-  }
-
-  .hero-btn {
-    padding: 15px 28px;
-    font-size: 0.9rem;
-    min-height: 44px;
   }
 
   .about {

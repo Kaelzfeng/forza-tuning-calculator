@@ -178,7 +178,8 @@ watch(user, (u) => {
             />
             <div v-if="loginError" class="login-error">{{ loginError }}</div>
             <button
-              class="login-btn btn-glass"
+              class="btn-primary"
+              style="width:100%;justify-content:center;"
               :disabled="sending"
               @click="handleSendLink"
             >
@@ -208,7 +209,7 @@ watch(user, (u) => {
       <div v-if="error" class="favs-container liquid-panel">
         <div class="favs-content state-center">
           <p class="state-text">Unable to load favorite tunes</p>
-          <button class="state-btn btn-glass" @click="loadFavorites">Retry</button>
+          <button class="btn-primary" @click="loadFavorites">Retry</button>
         </div>
       </div>
 
@@ -223,7 +224,7 @@ watch(user, (u) => {
       <div v-else-if="favorites.length === 0" class="favs-container liquid-panel">
         <div class="favs-content state-center">
           <p class="state-text">No favorite tunes yet</p>
-          <button class="state-btn btn-glass" @click="router.push('/tunes')">
+          <button class="btn-primary" @click="router.push('/tunes')">
             Browse Tunes
           </button>
         </div>
@@ -240,10 +241,10 @@ watch(user, (u) => {
             </div>
 
             <div class="fav-actions">
-              <button class="fav-btn fav-btn-open liquid-glass" @click="openFavorite(f)">
+              <button class="btn-secondary" @click="openFavorite(f)">
                 Open
               </button>
-              <button class="fav-btn fav-btn-remove" @click="confirmRemove(f)">
+              <button class="btn-danger" @click="confirmRemove(f)">
                 Remove
               </button>
             </div>
@@ -268,7 +269,7 @@ watch(user, (u) => {
           <p class="confirm-text">Remove this favorite?</p>
           <div class="confirm-actions">
             <button class="confirm-cancel" @click="cancelRemove">Cancel</button>
-            <button class="confirm-delete btn-glass" @click="executeRemove">Remove</button>
+            <button class="btn-danger" @click="executeRemove">Remove</button>
           </div>
         </div>
       </div>
@@ -338,13 +339,6 @@ watch(user, (u) => {
   margin: 0;
 }
 
-.state-btn {
-  padding: 12px 28px;
-  border-radius: 14px;
-  font-size: 0.88rem;
-  display: inline-flex;
-}
-
 /* ── Favorites list ── */
 .favs-list {
   width: 100%;
@@ -403,39 +397,6 @@ watch(user, (u) => {
   flex-shrink: 0;
 }
 
-.fav-btn {
-  padding: 7px 16px;
-  border-radius: 10px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.fav-btn-open {
-  color: #4a6b85;
-  border: 1px solid rgba(74, 107, 133, 0.14);
-  background: rgba(255, 255, 255, 0.28);
-}
-
-.fav-btn-open:hover {
-  background: rgba(255, 255, 255, 0.42);
-  color: #2d4a63;
-}
-
-.fav-btn-remove {
-  color: #b85b5b;
-  background: rgba(184, 91, 91, 0.06);
-  border: 1px solid rgba(184, 91, 91, 0.1);
-}
-
-.fav-btn-remove:hover {
-  background: rgba(184, 91, 91, 0.12);
-  color: #9a3e3e;
-}
-
 /* ── Login form ── */
 .login-form {
   display: flex;
@@ -460,20 +421,6 @@ watch(user, (u) => {
   border-radius: 10px;
   background: rgba(184, 91, 91, 0.06);
   border: 1px solid rgba(184, 91, 91, 0.14);
-}
-
-.login-btn {
-  width: 100%;
-  justify-content: center;
-  padding: 13px 24px;
-  border-radius: 14px;
-  font-size: 0.9rem;
-}
-
-.login-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
-  transform: none;
 }
 
 .login-sent {
@@ -548,13 +495,6 @@ watch(user, (u) => {
   color: #334155;
 }
 
-.confirm-delete {
-  padding: 9px 22px;
-  border-radius: 10px;
-  font-size: 0.8rem;
-  background: linear-gradient(180deg, #c46b6b 0%, #a84e4e 50%, #8b3a3a 100%);
-}
-
 @media (max-width: 640px) {
   .favs-page {
     padding: 16px;
@@ -585,13 +525,6 @@ watch(user, (u) => {
 
   .fav-actions {
     width: 100%;
-  }
-
-  .fav-btn {
-    flex: 1;
-    text-align: center;
-    justify-content: center;
-    padding: 10px 16px;
   }
 }
 </style>
