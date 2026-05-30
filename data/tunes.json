@@ -1,0 +1,14 @@
+[
+  {
+    "vehicle_slug": "nissan-skyline-r34",
+    "title": "Balanced Road Tune",
+    "share_code": "123 456 789",
+    "game_mode": "Road",
+    "class": "A",
+    "drivetrain": "AWD",
+    "tire_pressure_front": 28.5,
+    "tire_pressure_rear": 28.0,
+    "gear_final_drive": 3.45,
+    "notes": "Stable beginner-friendly AWD road tune."
+  }
+]

@@ -1,0 +1,220 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --radius-card: 20px;
+  --radius-inner: 16px;
+  --radius-btn: 12px;
+  --color-primary: #4a6b85;
+  --color-primary-hover: #2d4a63;
+  --color-success: #3d6a4a;
+  --color-heading: #111111;
+  --color-body: #222222;
+  --color-helper: #333333;
+  --color-danger: #b85b5b;
+  --motion-fast: 200ms ease;
+  --btn-height: 44px;
+  --input-height: 44px;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+/*
+   ═══════════════════════════════════════════════════════
+   Cinematic Background — 4-Layer Optical System
+   ═══════════════════════════════════════════════════════
+
+   Layer 1 — body background-image (original, sharp, fixed)
+   Layer 2 — body::before (blur 10px, scale 1.05, low opacity bleed)
+   Layer 3 — body::after (pearl-white / ice-blue / lavender overlay + vignette)
+   Layer 4 — #app content with Liquid Glass UI panels
+*/
+
+/* ── Layer 1: Original background image ── */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #222222;
+  min-height: 100svh;
+  position: relative;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.18);
+
+  /* Layer 1: cinematic image on top, fallback gradients behind */
+  background:
+    url('/cinematic-bg.webp') center / cover no-repeat fixed,
+    /* fallback gradients if image fails to load */
+    radial-gradient(ellipse 85% 65% at 80% -5%, rgba(145, 185, 225, 0.62), transparent),
+    radial-gradient(ellipse 75% 70% at 5% 95%, rgba(180, 162, 220, 0.55), transparent),
+    radial-gradient(ellipse 50% 55% at 50% 40%, rgba(235, 238, 250, 0.55), transparent),
+    radial-gradient(ellipse 58% 48% at 48% -6%, rgba(210, 222, 248, 0.52), transparent),
+    radial-gradient(ellipse 38% 42% at 70% 55%, rgba(250, 244, 246, 0.4), transparent),
+    radial-gradient(ellipse 42% 38% at 20% 30%, rgba(168, 198, 232, 0.36), transparent),
+    linear-gradient(180deg, #f4f5fa 0%, #f0f2f8 30%, #f3f4fa 55%, #f5f7fb 100%);
+}
+
+/* ── Layer 2: Blur layer (cinematic depth bleed) ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -5%;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url('/cinematic-bg.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  filter: blur(10px) brightness(1.04);
+  transform: scale(1.05);
+  opacity: 0.22;
+}
+
+/* ── Layer 3: Soft translucent overlay + vignette ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    /* vignette — darker edges for focal depth */
+    radial-gradient(ellipse 62% 58% at 50% 40%, transparent 42%, rgba(14, 18, 32, 0.18) 100%),
+    /* hero area — brighter top-center focal glow */
+    radial-gradient(ellipse 46% 36% at 50% 20%, rgba(255, 255, 255, 0.06), transparent 65%);
+}
+
+#app {
+  min-height: 100svh;
+  position: relative;
+  z-index: 1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ── Unified inputs — enhanced glass styling ── */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="url"],
+input[type="search"],
+select,
+textarea {
+  min-height: var(--input-height);
+  padding: 0 14px;
+  border-radius: var(--radius-inner);
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: #222222;
+  background: rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.44);
+  outline: none;
+  transition: border-color var(--motion-fast), box-shadow var(--motion-fast), background var(--motion-fast);
+  box-sizing: border-box;
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="number"]:hover,
+input[type="password"]:hover,
+input[type="url"]:hover,
+input[type="search"]:hover,
+select:hover,
+textarea:hover {
+  background: rgba(255, 255, 255, 0.32);
+  border-color: rgba(150, 170, 195, 0.45);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(91, 122, 154, 0.48);
+  box-shadow:
+    0 0 0 3px rgba(91, 122, 154, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.48);
+  background: rgba(255, 255, 255, 0.38);
+}
+
+textarea {
+  padding: 12px 14px;
+  min-height: 80px;
+  resize: vertical;
+}
+
+select {
+  appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a6b85' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+
+/* ── Unified badges ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge-pro     { color: #3d6a4a; background: rgba(91, 138, 106, 0.1);  border: 1px solid rgba(91, 138, 106, 0.2);  }
+.badge-public  { color: #3d6a4a; background: rgba(91, 138, 106, 0.1);  border: 1px solid rgba(91, 138, 106, 0.2);  }
+.badge-private { color: #8b6a4a; background: rgba(194, 154, 74, 0.1);  border: 1px solid rgba(194, 154, 74, 0.18); }
+.badge-draft   { color: #333333; background: rgba(107, 125, 146, 0.08); border: 1px solid rgba(107, 125, 146, 0.14); }
+.badge-tag     { color: #222222; background: rgba(255, 255, 255, 0.26); backdrop-filter: blur(10px) saturate(150%); -webkit-backdrop-filter: blur(10px) saturate(150%); border: 1px solid rgba(255, 255, 255, 0.40); }
+
+/* ── Disable fixed attachment on mobile for performance ── */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  body::before {
+    background-attachment: scroll;
+  }
+}
