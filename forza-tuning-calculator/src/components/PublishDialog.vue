@@ -202,9 +202,9 @@ async function handlePublish() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 18, 32, 0.35);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(10, 18, 32, 0.30);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
   padding: 20px;
 }
 
@@ -234,7 +234,7 @@ async function handlePublish() {
 .pd-title {
   font-size: 1.05rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -245,7 +245,7 @@ async function handlePublish() {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b7d92;
+  color: #333333;
   cursor: pointer;
   transition: all 0.15s ease;
   background: transparent;
@@ -254,7 +254,7 @@ async function handlePublish() {
 
 .pd-close:hover {
   background: rgba(255, 255, 255, 0.3);
-  color: #0f1720;
+  color: #111111;
 }
 
 /* ── Login gate ── */
@@ -289,7 +289,7 @@ async function handlePublish() {
 .pd-label {
   font-size: 0.72rem;
   font-weight: 600;
-  color: #334155;
+  color: #222222;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -302,7 +302,7 @@ async function handlePublish() {
   padding: 10px 14px;
   border-radius: 12px;
   font-size: 0.88rem;
-  color: #2d3748;
+  color: #222222;
   font-family: inherit;
   width: 100%;
 }
@@ -311,7 +311,7 @@ async function handlePublish() {
   padding: 10px 14px;
   border-radius: 12px;
   font-size: 0.88rem;
-  color: #2d3748;
+  color: #222222;
   font-family: inherit;
   width: 100%;
   resize: vertical;
@@ -328,7 +328,7 @@ async function handlePublish() {
 .pd-slug-label {
   font-size: 0.6rem;
   font-weight: 600;
-  color: #8b95a1;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   display: block;
@@ -366,17 +366,20 @@ async function handlePublish() {
   border-radius: 12px;
   font-size: 0.82rem;
   font-weight: 600;
-  color: #6b7d92;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #333333;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.36);
   cursor: pointer;
   transition: all 0.15s ease;
   font-family: inherit;
 }
 
 .pd-btn-cancel:hover {
-  background: rgba(255, 255, 255, 0.35);
-  color: #334155;
+  background: rgba(255, 255, 255, 0.34);
+  border-color: rgba(255, 255, 255, 0.48);
+  color: #222222;
 }
 
 .pd-btn-publish {
@@ -425,7 +428,7 @@ async function handlePublish() {
 .pd-success-text {
   font-size: 0.95rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
 }
 
 .pd-view-link {

@@ -253,7 +253,7 @@ watch(slug, () => { fetchVehicle() })
             <div class="vd-hero-actions">
               <button
                 v-if="!user"
-                class="vd-fav-btn vd-fav-login liquid-glass"
+                class="vd-fav-btn vd-fav-login"
                 :title="t('vehicle.loginToSave')"
                 disabled
               >
@@ -264,7 +264,7 @@ watch(slug, () => { fetchVehicle() })
               </button>
               <button
                 v-else-if="isFavorite(vehicle.id)"
-                class="vd-fav-btn vd-fav-saved liquid-glass"
+                class="vd-fav-btn vd-fav-saved"
                 :disabled="favToggling"
                 @click="handleToggleFavorite"
               >
@@ -275,7 +275,7 @@ watch(slug, () => { fetchVehicle() })
               </button>
               <button
                 v-else
-                class="vd-fav-btn vd-fav-save liquid-glass"
+                class="vd-fav-btn vd-fav-save"
                 :disabled="favToggling"
                 @click="handleToggleFavorite"
               >
@@ -479,7 +479,7 @@ watch(slug, () => { fetchVehicle() })
 .vd-state-title {
   font-size: 1.1rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111827;
   margin: 0;
 }
 
@@ -491,7 +491,7 @@ watch(slug, () => { fetchVehicle() })
 
 .vd-state-desc {
   font-size: 0.85rem;
-  color: #334155;
+  color: #374151;
   font-weight: 500;
   margin: 0;
   line-height: 1.5;
@@ -515,12 +515,23 @@ watch(slug, () => { fetchVehicle() })
   font-size: 0.82rem;
   font-weight: 600;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(12px) saturate(155%);
+  -webkit-backdrop-filter: blur(12px) saturate(155%);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 2px 8px rgba(0, 0, 0, 0.04);
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
   font-family: inherit;
+}
+
+.vd-back-link:hover {
+  background: rgba(255, 255, 255, 0.34);
+  border-color: rgba(255, 255, 255, 0.52);
+  transform: translateY(-1px);
 }
 
 .vd-back-link:hover {
@@ -543,13 +554,18 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vd-hero-img-wrap {
-  width: 180px;
-  height: 120px;
+  width: 200px;
+  height: 130px;
   border-radius: 16px;
   overflow: hidden;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.36),
+    0 3px 10px rgba(0, 0, 0, 0.05);
 }
 
 .vd-hero-img {
@@ -566,7 +582,7 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vd-hero-manufacturer {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 600;
   color: #6b859e;
   text-transform: uppercase;
@@ -574,9 +590,9 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vd-hero-name {
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   font-weight: 720;
-  color: #0f1720;
+  color: #111827;
   margin: 0;
   line-height: 1.15;
   letter-spacing: -0.015em;
@@ -589,63 +605,75 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vd-hero-actions {
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .vd-fav-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.72rem;
-  font-weight: 600;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 620;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   font-family: inherit;
+  border: 1px solid transparent;
+  min-height: 40px;
 }
 
 .vd-fav-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: default;
   transform: none;
 }
 
 .vd-fav-login {
-  color: #8b95a1;
+  color: #6b7280;
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.30);
   cursor: default;
 }
 
 .vd-fav-save {
   color: #4a6b85;
+  background: rgba(255, 255, 255, 0.30);
+  border-color: rgba(255, 255, 255, 0.40);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 
 .vd-fav-save:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.42);
+  border-color: rgba(91, 122, 154, 0.35);
   color: #2d4a63;
   transform: translateY(-1px);
 }
 
 .vd-fav-saved {
   color: #b85b5b;
+  background: rgba(184, 91, 91, 0.08);
+  border-color: rgba(184, 91, 91, 0.16);
 }
 
 .vd-fav-saved:hover:not(:disabled) {
+  background: rgba(184, 91, 91, 0.14);
   transform: translateY(-1px);
 }
 
 .vd-tag {
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: 20px;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: #334155;
+  color: #1f2937;
 }
 
 /* ── Stats ── */
 .vd-stats {
   display: flex;
-  gap: 16px;
-  padding: 20px 24px;
+  gap: 20px;
+  padding: 22px 28px;
   border-radius: 18px;
   position: relative;
   z-index: 2;
@@ -656,26 +684,26 @@ watch(slug, () => { fetchVehicle() })
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
   flex: 1;
-  min-width: 60px;
+  min-width: 80px;
   position: relative;
   z-index: 2;
 }
 
 .vd-stat-value {
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: #0f1720;
+  color: #111827;
   font-variant-numeric: tabular-nums;
 }
 
 .vd-stat-label {
-  font-size: 0.62rem;
-  font-weight: 600;
+  font-size: 0.65rem;
+  font-weight: 650;
   color: #6b859e;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 
 /* ── Sections ── */
@@ -685,16 +713,10 @@ watch(slug, () => { fetchVehicle() })
   gap: 14px;
 }
 
-.vd-section-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-
 .vd-section-title {
-  font-size: 1rem;
+  font-size: 1.10rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111827;
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -723,52 +745,45 @@ watch(slug, () => { fetchVehicle() })
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  padding: 32px 20px;
+  padding: 36px 24px;
   border-radius: 18px;
-  color: #7b8ea0;
+  color: #6b7280;
   text-align: center;
 }
 
 .vd-empty-text {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 520;
-  color: #5a6775;
+  color: #4b5563;
 }
 
 .vd-empty-cta {
-  padding: 8px 18px;
+  padding: 9px 20px;
   border-radius: 10px;
-  font-size: 0.78rem;
+  font-size: 0.80rem;
   font-weight: 600;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.38);
   text-decoration: none;
   transition: all 0.15s ease;
 }
 
 .vd-empty-cta:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.40);
   color: #2d4a63;
-}
-
-/* ── Related ── */
-.vd-related-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 12px;
 }
 
 /* ── About ── */
 .vd-about {
-  padding: 22px 26px;
+  padding: 24px 28px;
   border-radius: 18px;
 }
 
 .vd-about-text {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   line-height: 1.75;
-  color: #334155;
+  color: #374151;
   font-weight: 500;
   margin: 0;
   position: relative;
@@ -780,18 +795,18 @@ watch(slug, () => { fetchVehicle() })
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 16px 20px;
+  padding: 18px 22px;
   border-radius: 14px;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 550;
-  color: #7b8ea0;
+  color: #4b5563;
 }
 
 .vc-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 16px;
+  gap: 12px;
+  padding: 18px;
   border-radius: 16px;
 }
 
@@ -799,16 +814,16 @@ watch(slug, () => { fetchVehicle() })
   padding: 12px 14px;
   border-radius: 12px;
   font-size: 0.85rem;
-  color: #2d3748;
+  color: #111827;
   font-family: inherit;
   resize: vertical;
-  min-height: 72px;
+  min-height: 80px;
   width: 100%;
   line-height: 1.5;
 }
 
 .vc-textarea::placeholder {
-  color: #8b95a1;
+  color: #9ca3af;
 }
 
 .vc-form-footer {
@@ -818,15 +833,15 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vc-char-count {
-  font-size: 0.68rem;
+  font-size: 0.70rem;
   font-weight: 500;
-  color: #8b95a1;
+  color: #6b7280;
 }
 
 .vc-post-btn {
-  padding: 8px 20px;
+  padding: 9px 22px;
   border-radius: 10px;
-  font-size: 0.78rem;
+  font-size: 0.80rem;
 }
 
 .vc-post-btn:disabled {
@@ -852,7 +867,7 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vc-comment {
-  padding: 16px 18px;
+  padding: 18px 20px;
   border-radius: 16px;
   display: flex;
   flex-direction: column;
@@ -866,21 +881,21 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vc-comment-email {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: #5b7a9a;
 }
 
 .vc-comment-time {
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   font-weight: 500;
-  color: #8b95a1;
+  color: #6b7280;
 }
 
 .vc-comment-body {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   line-height: 1.6;
-  color: #334155;
+  color: #1f2937;
   font-weight: 500;
   margin: 0;
   white-space: pre-wrap;
@@ -896,7 +911,7 @@ watch(slug, () => { fetchVehicle() })
   border-radius: 8px;
   font-size: 0.65rem;
   font-weight: 550;
-  color: #8b95a1;
+  color: #333333;
   cursor: pointer;
   transition: all 0.15s ease;
   font-family: inherit;

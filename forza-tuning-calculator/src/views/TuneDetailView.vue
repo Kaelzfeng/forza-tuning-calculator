@@ -481,7 +481,7 @@ function formatDate(iso) {
 .td-state-title {
   font-size: 1.15rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -493,7 +493,7 @@ function formatDate(iso) {
 
 .td-state-desc {
   font-size: 0.85rem;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
   line-height: 1.55;
@@ -613,9 +613,9 @@ function formatDate(iso) {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 18, 32, 0.35);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(10, 18, 32, 0.30);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
   padding: 20px;
 }
 
@@ -639,13 +639,13 @@ function formatDate(iso) {
 .td-del-title {
   font-size: 0.95rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
 .td-del-desc {
   font-size: 0.8rem;
-  color: #5a6775;
+  color: #333333;
   font-weight: 500;
   margin: 0;
   line-height: 1.5;
@@ -673,16 +673,19 @@ function formatDate(iso) {
   border-radius: 10px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #6b7d92;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #333333;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.36);
   cursor: pointer;
   font-family: inherit;
 }
 
 .td-del-cancel:hover {
-  background: rgba(255, 255, 255, 0.32);
-  color: #334155;
+  background: rgba(255, 255, 255, 0.34);
+  border-color: rgba(255, 255, 255, 0.48);
+  color: #222222;
 }
 
 .td-del-confirm {
@@ -727,7 +730,7 @@ function formatDate(iso) {
 .td-title {
   font-size: 1.5rem;
   font-weight: 720;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
   line-height: 1.2;
   letter-spacing: -0.015em;
@@ -738,17 +741,17 @@ function formatDate(iso) {
   align-items: center;
   gap: 12px;
   font-size: 0.82rem;
-  color: #334155;
+  color: #222222;
   font-weight: 520;
 }
 
 .td-author {
   font-weight: 600;
-  color: #0f1720;
+  color: #111111;
 }
 
 .td-date {
-  color: #7b8ea0;
+  color: #333333;
 }
 
 .td-tags {
@@ -762,7 +765,7 @@ function formatDate(iso) {
   border-radius: 20px;
   font-size: 0.72rem;
   font-weight: 600;
-  color: #334155;
+  color: #222222;
 }
 
 /* ── Content ── */
@@ -775,7 +778,7 @@ function formatDate(iso) {
 .td-description {
   font-size: 0.85rem;
   line-height: 1.65;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
   padding-top: 4px;
@@ -790,7 +793,7 @@ function formatDate(iso) {
 .td-section-title {
   font-size: 0.9rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -802,8 +805,13 @@ function formatDate(iso) {
   z-index: 2;
   padding: 20px 22px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 3px 12px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -819,7 +827,7 @@ function formatDate(iso) {
 .personality-title {
   font-size: 0.95rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
   line-height: 1.2;
 }
@@ -846,7 +854,7 @@ function formatDate(iso) {
 .insights-title {
   font-size: 0.9rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -870,8 +878,13 @@ function formatDate(iso) {
   gap: 8px;
   padding: 16px 18px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(12px) saturate(155%);
+  -webkit-backdrop-filter: blur(12px) saturate(155%);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .insight-header {
@@ -884,7 +897,7 @@ function formatDate(iso) {
 .insight-title {
   font-size: 0.82rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
 }
 
 .insight-severity {
@@ -918,7 +931,7 @@ function formatDate(iso) {
 .insight-desc {
   font-size: 0.75rem;
   line-height: 1.6;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
 }
@@ -956,7 +969,7 @@ function formatDate(iso) {
 .result-number {
   font-size: 1.1rem;
   font-weight: 660;
-  color: #0f1720;
+  color: #111111;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
   word-break: break-word;
@@ -966,7 +979,7 @@ function formatDate(iso) {
 .result-unit {
   font-size: 0.73rem;
   font-weight: 580;
-  color: #334155;
+  color: #222222;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
@@ -974,7 +987,7 @@ function formatDate(iso) {
 .result-label {
   font-size: 0.78rem;
   font-weight: 620;
-  color: #0f1720;
+  color: #111111;
   line-height: 1.3;
   position: relative;
   z-index: 2;
@@ -983,7 +996,7 @@ function formatDate(iso) {
 .result-desc {
   font-size: 0.72rem;
   font-weight: 550;
-  color: #334155;
+  color: #222222;
   position: relative;
   z-index: 2;
 }
@@ -1014,7 +1027,7 @@ function formatDate(iso) {
 .apply-title {
   font-size: 0.9rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -1083,7 +1096,7 @@ function formatDate(iso) {
 .step-title {
   font-size: 0.82rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -1107,11 +1120,11 @@ function formatDate(iso) {
   font-weight: 600;
   font-family: inherit;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(12px) saturate(150%);
-  -webkit-backdrop-filter: blur(12px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -1px 0 rgba(80, 110, 150, 0.04);
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(14px) saturate(165%);
+  -webkit-backdrop-filter: blur(14px) saturate(165%);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.035), inset 0 1px 0 rgba(255, 255, 255, 0.58);
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
@@ -1120,8 +1133,9 @@ function formatDate(iso) {
 
 .btn-copy:hover {
   color: #3d5c73;
-  background: rgba(255, 255, 255, 0.42);
-  box-shadow: 0 2px 12px rgba(91, 122, 154, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.65), inset 0 -1px 0 rgba(80, 110, 150, 0.05);
+  background: rgba(255, 255, 255, 0.40);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 3px 16px rgba(91, 122, 154, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.64);
   transform: translateY(-1px);
 }
 
@@ -1180,14 +1194,14 @@ function formatDate(iso) {
 .td-locked-title {
   font-size: 1rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
 .td-locked-desc {
   font-size: 0.85rem;
   line-height: 1.6;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
   max-width: 360px;

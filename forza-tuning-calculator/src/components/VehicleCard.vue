@@ -62,7 +62,7 @@ const classColors = {
 
       <div class="vc-tags">
         <span v-if="vehicle.drivetrain" class="vc-tag">{{ vehicle.drivetrain }}</span>
-        <span v-if="vehicle.class" class="vc-tag" :style="{ color: classColors[vehicle.class] || '#334155' }">{{ vehicle.class }}</span>
+        <span v-if="vehicle.class" class="vc-tag" :style="{ color: classColors[vehicle.class] || '#222222' }">{{ vehicle.class }}</span>
         <span v-if="vehicle.year" class="vc-tag">{{ vehicle.year }}</span>
       </div>
 
@@ -102,15 +102,18 @@ const classColors = {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #b0bac5;
+  background: rgba(255, 255, 255, 0.36);
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.50),
+    0 2px 8px rgba(0, 0, 0, 0.06);
+  color: #333333;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
   z-index: 2;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 .vc-fav-btn:hover:not(:disabled) {
@@ -136,8 +139,13 @@ const classColors = {
   border-radius: 14px;
   overflow: hidden;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.40),
+    0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .vc-img {
@@ -166,7 +174,7 @@ const classColors = {
 .vc-name {
   font-size: 0.88rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
   line-height: 1.2;
 }
@@ -182,15 +190,17 @@ const classColors = {
   border-radius: 8px;
   font-size: 0.6rem;
   font-weight: 600;
-  color: #334155;
-  background: rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #222222;
+  background: rgba(255, 255, 255, 0.26);
+  backdrop-filter: blur(6px) saturate(140%);
+  -webkit-backdrop-filter: blur(6px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.38);
 }
 
 .vc-stats {
   font-size: 0.68rem;
   font-weight: 520;
-  color: #5a6775;
+  color: #333333;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -205,7 +215,7 @@ const classColors = {
 }
 
 .vc-no-tunes {
-  color: #8b95a1;
+  color: #333333;
 }
 
 @media (max-width: 640px) {

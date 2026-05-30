@@ -3,6 +3,7 @@ import { useRoute } from 'vue-router'
 import AuthButton from './components/AuthButton.vue'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
 import UpgradeProButton from './components/UpgradeProButton.vue'
+import AppIntro from './components/AppIntro.vue'
 import AppToast from './components/AppToast.vue'
 import { useI18n } from './i18n/index.js'
 
@@ -15,11 +16,11 @@ const { t } = useI18n()
     <nav class="nav-bar">
       <div class="nav-inner liquid-panel">
         <router-link to="/" class="nav-logo">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <circle cx="12" cy="12" r="6" />
-            <circle cx="12" cy="12" r="2" />
-          </svg>
+          <img
+            src="/KF_Logo.png"
+            alt="KF Logo"
+            class="brand-logo-img"
+          />
           FORZA TUNE
         </router-link>
 
@@ -45,6 +46,8 @@ const { t } = useI18n()
         </div>
       </div>
     </nav>
+
+    <AppIntro />
 
     <main class="main-content">
       <router-view />
@@ -93,14 +96,22 @@ const { t } = useI18n()
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: #0f1720;
+  color: #111111;
   text-decoration: none;
   position: relative;
   z-index: 2;
+}
+
+.brand-logo-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
 }
 
 .nav-links {
@@ -115,28 +126,28 @@ const { t } = useI18n()
   border-radius: 12px;
   font-size: 0.85rem;
   font-weight: 550;
-  color: #334155;
+  color: #222222;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .nav-link:hover {
-  color: #0f1720;
-  background: rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  color: #111111;
+  background: rgba(255, 255, 255, 0.32);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
 }
 
 .nav-link.active {
-  color: #0f1720;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(22px) saturate(180%);
-  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  color: #111111;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.28));
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.50);
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.07),
-    0 0 0 1px rgba(255, 255, 255, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.55);
-  transform: translateY(-1px);
+    0 3px 14px rgba(0, 0, 0, 0.07),
+    0 0 0 1px rgba(255, 255, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58);
 }
 
 .nav-actions {
@@ -170,7 +181,7 @@ const { t } = useI18n()
 .footer-name {
   font-size: 0.9rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0 0 8px;
   position: relative;
   z-index: 2;
@@ -179,7 +190,7 @@ const { t } = useI18n()
 .footer-disclaimer {
   font-size: 0.78rem;
   line-height: 1.6;
-  color: #475569;
+  color: #333333;
   font-weight: 500;
   margin: 0;
   max-width: 520px;

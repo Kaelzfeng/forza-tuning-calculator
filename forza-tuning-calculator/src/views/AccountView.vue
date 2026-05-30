@@ -358,7 +358,7 @@ watch(user, (u) => {
 .page-heading {
   font-size: 1.6rem;
   font-weight: 720;
-  color: #0f1720;
+  color: #111111;
   letter-spacing: -0.02em;
   margin: 0 0 8px;
   text-align: center;
@@ -382,7 +382,7 @@ watch(user, (u) => {
 .section-title {
   font-size: 1.05rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -390,20 +390,20 @@ watch(user, (u) => {
 .section-desc {
   font-size: 0.88rem;
   line-height: 1.6;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
 }
 
 .section-loading {
   font-size: 0.85rem;
-  color: #7b8ea0;
+  color: #333333;
   font-weight: 500;
 }
 
 .section-empty {
   font-size: 0.85rem;
-  color: #8b95a1;
+  color: #333333;
   font-weight: 500;
   margin: 0;
 }
@@ -425,20 +425,20 @@ watch(user, (u) => {
 .info-label {
   font-size: 0.82rem;
   font-weight: 550;
-  color: #6b7d92;
+  color: #333333;
   flex-shrink: 0;
 }
 
 .info-value {
   font-size: 0.88rem;
   font-weight: 600;
-  color: #1f2937;
+  color: #222222;
   text-align: right;
   word-break: break-all;
 }
 
 .info-muted {
-  color: #8b95a1;
+  color: #333333;
   font-weight: 500;
 }
 
@@ -480,7 +480,7 @@ watch(user, (u) => {
   margin: 0;
   font-size: 0.84rem;
   font-weight: 550;
-  color: #6b7d92;
+  color: #333333;
 }
 
 /* ── Preview cards ── */
@@ -501,7 +501,7 @@ watch(user, (u) => {
 .preview-title {
   font-size: 0.85rem;
   font-weight: 580;
-  color: #1f2937;
+  color: #222222;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -510,7 +510,7 @@ watch(user, (u) => {
 .preview-date {
   font-size: 0.75rem;
   font-weight: 500;
-  color: #8b95a1;
+  color: #333333;
   flex-shrink: 0;
 }
 
@@ -543,7 +543,7 @@ watch(user, (u) => {
   padding: 11px 16px;
   border-radius: 12px;
   font-size: 0.9rem;
-  color: #2d3748;
+  color: #222222;
   font-family: inherit;
   width: 100%;
 }
@@ -561,14 +561,14 @@ watch(user, (u) => {
 .login-sent {
   font-size: 0.88rem;
   line-height: 1.6;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
 }
 
 .login-sent-sub {
   font-size: 0.78rem;
-  color: #8b95a1;
+  color: #333333;
   margin: 0;
 }
 

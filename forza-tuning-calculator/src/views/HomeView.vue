@@ -44,33 +44,44 @@ function goToCalculator(mode) {
       </div>
       <h1 class="hero-title">{{ t('home.title') }}</h1>
       <p class="hero-subtitle">{{ t('home.subtitle') }}</p>
-      <button class="btn-primary" style="font-size:0.95rem; padding:0 32px;" @click="goToCalculator('road')">
-        <span>{{ t('home.startTuning') }}</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
-        </svg>
-      </button>
-    </section>
-
-    <section class="modes">
-      <div v-for="mode in modes" :key="mode.id" class="mode-card liquid-card" @click="goToCalculator(mode.id)">
-        <div class="mode-icon glass-orb">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path :d="mode.icon" /></svg>
-        </div>
-        <div class="mode-body readable-layer">
-          <h3 class="mode-title">{{ t(mode.titleKey) }}</h3>
-          <p class="mode-desc">{{ t(mode.descKey) }}</p>
-        </div>
-        <div class="mode-arrow">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <div class="hero-actions">
+        <button class="btn-primary hero-cta" @click="goToCalculator('road')">
+          <span>{{ t('home.startTuning') }}</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
           </svg>
+        </button>
+        <router-link to="/tunes" class="hero-secondary-cta">
+          Browse Community Tunes
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+          </svg>
+        </router-link>
+      </div>
+    </section>
+
+    <section class="modes-section">
+      <p class="section-label">Choose Your Tuning Mode</p>
+      <div class="modes">
+        <div v-for="mode in modes" :key="mode.id" class="mode-card liquid-card" @click="goToCalculator(mode.id)">
+          <div class="mode-icon glass-orb">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path :d="mode.icon" /></svg>
+          </div>
+          <div class="mode-body">
+            <h3 class="mode-title">{{ t(mode.titleKey) }}</h3>
+            <p class="mode-desc">{{ t(mode.descKey) }}</p>
+          </div>
+          <div class="mode-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+            </svg>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="about liquid-panel">
-      <div class="about-body readable-layer">
+      <div class="about-body">
         <div class="about-header">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
@@ -88,13 +99,14 @@ function goToCalculator(mode) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 64px;
+  gap: 56px;
   padding: 24px;
   padding-top: 48px;
   padding-bottom: 80px;
   scroll-margin-top: 80px;
 }
 
+/* ── Hero ── */
 .hero {
   display: flex;
   flex-direction: column;
@@ -102,8 +114,8 @@ function goToCalculator(mode) {
   text-align: center;
   gap: 24px;
   width: 100%;
-  max-width: 620px;
-  padding: 64px 48px;
+  max-width: 640px;
+  padding: 64px 52px;
   border-radius: 36px;
 }
 
@@ -111,14 +123,19 @@ function goToCalculator(mode) {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 5px 16px;
+  padding: 6px 18px;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.03em;
   color: #4a6b85;
-  background: rgba(91, 122, 154, 0.06);
-  border: 1px solid rgba(91, 122, 154, 0.1);
+  background: rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.40);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 2px 8px rgba(0, 0, 0, 0.04);
   position: relative;
   z-index: 2;
 }
@@ -126,7 +143,7 @@ function goToCalculator(mode) {
 .hero-title {
   font-size: clamp(2.6rem, 6.5vw, 4rem);
   font-weight: 780;
-  color: #0f1720;
+  color: #111827;
   line-height: 1.08;
   letter-spacing: -0.025em;
   margin: 0;
@@ -136,12 +153,65 @@ function goToCalculator(mode) {
 
 .hero-subtitle {
   font-size: 1.1rem;
-  line-height: 1.6;
+  line-height: 1.65;
   color: #1f2937;
-  max-width: 420px;
+  max-width: 440px;
   margin: 0;
   position: relative;
   z-index: 2;
+  font-weight: 500;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+  margin-top: 4px;
+}
+
+.hero-cta {
+  font-size: 0.95rem;
+  padding: 0 32px;
+}
+
+.hero-secondary-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a6b85;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.hero-secondary-cta:hover {
+  color: #2d4a63;
+  background: rgba(255, 255, 255, 0.30);
+}
+
+/* ── Section label ── */
+.section-label {
+  font-size: 0.80rem;
+  font-weight: 650;
+  color: #6b859e;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+/* ── Modes ── */
+.modes-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 1040px;
 }
 
 .modes {
@@ -149,14 +219,13 @@ function goToCalculator(mode) {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
   width: 100%;
-  max-width: 1040px;
 }
 
 .mode-card {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 32px 28px 28px;
+  padding: 32px 28px 24px;
   border-radius: 24px;
 }
 
@@ -174,10 +243,12 @@ function goToCalculator(mode) {
 
 .mode-card:hover .mode-icon {
   transform: scale(1.08);
+  background: rgba(255, 255, 255, 0.40);
+  border-color: rgba(255, 255, 255, 0.55);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    0 4px 16px rgba(74, 107, 133, 0.14),
-    0 0 0 1px rgba(255, 255, 255, 0.12);
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    0 6px 20px rgba(74, 107, 133, 0.16),
+    0 0 0 1px rgba(255, 255, 255, 0.15);
 }
 
 .mode-body {
@@ -191,17 +262,17 @@ function goToCalculator(mode) {
 
 .mode-title {
   font-size: 1.1rem;
-  font-weight: 650;
-  color: #0f1720;
+  font-weight: 680;
+  color: #111827;
   margin: 0;
   letter-spacing: -0.01em;
 }
 
 .mode-desc {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   line-height: 1.55;
   font-weight: 500;
-  color: #334155;
+  color: #1f2937;
   margin: 0;
 }
 
@@ -220,6 +291,7 @@ function goToCalculator(mode) {
   color: #4a6b85;
 }
 
+/* ── About ── */
 .about {
   width: 100%;
   max-width: 680px;
@@ -230,7 +302,7 @@ function goToCalculator(mode) {
   padding: 28px 32px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   position: relative;
   z-index: 2;
 }
@@ -243,9 +315,9 @@ function goToCalculator(mode) {
 }
 
 .about-title {
-  font-size: 0.95rem;
-  font-weight: 650;
-  color: #0f1720;
+  font-size: 1rem;
+  font-weight: 680;
+  color: #111827;
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -253,22 +325,23 @@ function goToCalculator(mode) {
 .about-text {
   font-size: 0.875rem;
   line-height: 1.75;
-  color: #273444;
+  color: #374151;
   font-weight: 500;
   margin: 0;
 }
 
 .about-text strong {
-  color: #0f1720;
-  font-weight: 650;
+  color: #111827;
+  font-weight: 680;
 }
 
+/* ── Mobile ── */
 @media (max-width: 640px) {
   .home {
     padding: 16px;
-    padding-top: 28px;
-    padding-bottom: 60px;
-    gap: 44px;
+    padding-top: 32px;
+    padding-bottom: 64px;
+    gap: 52px;
   }
 
   .hero {
@@ -285,6 +358,20 @@ function goToCalculator(mode) {
     font-size: 1rem;
   }
 
+  .hero-actions {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .hero-cta {
+    width: 100%;
+  }
+
+  .hero-secondary-cta {
+    justify-content: center;
+  }
+
   .about {
     border-radius: 20px;
   }
@@ -294,13 +381,17 @@ function goToCalculator(mode) {
     gap: 10px;
   }
 
+  .modes-section {
+    gap: 12px;
+  }
+
   .modes {
     grid-template-columns: 1fr;
     gap: 14px;
   }
 
   .mode-card {
-    padding: 26px 22px 24px;
+    padding: 26px 22px 20px;
     border-radius: 20px;
     gap: 14px;
   }

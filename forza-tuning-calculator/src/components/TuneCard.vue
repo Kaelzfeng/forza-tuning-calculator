@@ -57,12 +57,7 @@ function formatDate(iso) {
   color: inherit;
 }
 
-.tune-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 8px 28px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.5);
-}
+/* Hover handled by global .glass-card / .liquid-card */
 
 .tc-top {
   display: flex;
@@ -82,14 +77,14 @@ function formatDate(iso) {
 .tc-date {
   font-size: 0.62rem;
   font-weight: 500;
-  color: #8b95a1;
+  color: #333333;
   flex-shrink: 0;
 }
 
 .tc-title {
   font-size: 0.92rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
   line-height: 1.25;
   letter-spacing: -0.01em;
@@ -106,15 +101,17 @@ function formatDate(iso) {
   border-radius: 10px;
   font-size: 0.62rem;
   font-weight: 600;
-  color: #334155;
-  background: rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #222222;
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.42);
 }
 
 .tc-notes {
   font-size: 0.75rem;
   line-height: 1.55;
-  color: #5a6775;
+  color: #333333;
   font-weight: 500;
   margin: 0;
 }

@@ -306,7 +306,7 @@ watch([authLoading, user], ([al, u]) => {
 
 .state-text {
   font-size: 0.88rem;
-  color: #8b95a1;
+  color: #333333;
   font-weight: 500;
   margin: 0;
 }
@@ -353,7 +353,7 @@ watch([authLoading, user], ([al, u]) => {
 .section-title {
   font-size: 0.95rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -383,7 +383,7 @@ watch([authLoading, user], ([al, u]) => {
 .field-label {
   font-size: 0.72rem;
   font-weight: 600;
-  color: #334155;
+  color: #222222;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -398,7 +398,7 @@ watch([authLoading, user], ([al, u]) => {
   padding: 10px 14px;
   border-radius: 12px;
   font-size: 0.88rem;
-  color: #2d3748;
+  color: #222222;
   font-family: inherit;
   width: 100%;
 }
@@ -407,7 +407,7 @@ watch([authLoading, user], ([al, u]) => {
   padding: 10px 14px;
   border-radius: 12px;
   font-size: 0.88rem;
-  color: #2d3748;
+  color: #222222;
   font-family: inherit;
   width: 100%;
   resize: vertical;
@@ -429,7 +429,7 @@ watch([authLoading, user], ([al, u]) => {
   transform: translateY(-50%);
   font-size: 0.72rem;
   font-weight: 580;
-  color: #6b7d92;
+  color: #333333;
   pointer-events: none;
 }
 
@@ -448,7 +448,7 @@ watch([authLoading, user], ([al, u]) => {
 .public-hint {
   font-size: 0.74rem;
   font-weight: 500;
-  color: #6b7d92;
+  color: #333333;
   margin: 0;
   padding-left: 24px;
   line-height: 1.45;

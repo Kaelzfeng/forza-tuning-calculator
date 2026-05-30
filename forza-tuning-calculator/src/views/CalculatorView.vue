@@ -893,31 +893,35 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
             <span class="panel-subtitle">{{ t('calculator.realtimeCalc') }}</span>
           </div>
           <div class="actions-row">
-            <button class="btn-secondary" @click="openPresetModal">
-              {{ appliedPresetTitle ? `Preset: ${appliedPresetTitle}` : 'Apply Preset' }}
-            </button>
-            <input
-              ref="importFileInput"
-              type="file"
-              accept=".json"
-              class="import-file-input"
-              @change="handleImportFile"
-            />
-            <button class="btn-secondary" @click="triggerImport">
-              {{ importStatus === 'success' ? 'Imported' : importStatus === 'error' ? 'Import failed' : 'Import Tune' }}
-            </button>
-            <button class="btn-secondary" @click="isPro ? copyTune() : openProModal('Copy tune values to clipboard')">
-              {{ copied ? 'Copied' : 'Copy Tune' }}
-            </button>
-            <button class="btn-secondary" @click="shareTune">
-              {{ copiedShare ? 'Shared' : 'Share' }}
-            </button>
-            <span v-if="shareHint" class="share-hint">{{ shareHint }}</span>
+            <div class="actions-row-secondary">
+              <button class="btn-secondary btn-tight" @click="openPresetModal">
+                {{ appliedPresetTitle ? `Preset: ${appliedPresetTitle}` : 'Apply Preset' }}
+              </button>
+              <input
+                ref="importFileInput"
+                type="file"
+                accept=".json"
+                class="import-file-input"
+                @change="handleImportFile"
+              />
+              <button class="btn-secondary btn-tight" @click="triggerImport">
+                {{ importStatus === 'success' ? 'Imported' : importStatus === 'error' ? 'Import failed' : 'Import Tune' }}
+              </button>
+              <button class="btn-secondary btn-tight" @click="isPro ? copyTune() : openProModal('Copy tune values to clipboard')">
+                {{ copied ? 'Copied' : 'Copy Tune' }}
+              </button>
+              <button class="btn-secondary btn-tight" @click="shareTune">
+                {{ copiedShare ? 'Shared' : 'Share' }}
+              </button>
+            </div>
             <button class="btn-primary" @click="isPro ? saveCurrentBuild() : openProModal('Save your tune builds to the cloud')">
               {{ saveStatus === 'build' ? 'Saved' : saveStatus === 'updated' ? 'Updated' : editingTuneId ? 'Update Build' : 'Save Build' }}
             </button>
           </div>
+          <span v-if="shareHint" class="share-hint">{{ shareHint }}</span>
         </div>
+
+        <hr class="output-divider" />
 
         <div class="personality-card">
           <div class="personality-header">
@@ -938,6 +942,8 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
           </ul>
         </div>
 
+        <hr class="output-divider" />
+
         <div class="behavior-section">
           <div class="behavior-header">
             <h3 class="behavior-title">{{ t('calculator.carBehavior') }}</h3>
@@ -954,6 +960,8 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
           </div>
         </div>
 
+        <hr v-if="drivingInsights.length > 0" class="output-divider" />
+
         <div v-if="drivingInsights.length > 0" class="insights-section">
           <h3 class="insights-title">{{ t('calculator.drivingInsights') }}</h3>
           <span class="insights-subtitle">{{ t('calculator.insightsSubtitle') }}</span>
@@ -967,6 +975,8 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
             </div>
           </div>
         </div>
+
+        <hr class="output-divider" />
 
         <div class="compare-section">
           <h3 class="compare-title">{{ t('calculator.compareTitle') }}</h3>
@@ -1005,9 +1015,11 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
           </div>
         </div>
 
+        <hr class="output-divider" />
+
         <div class="result-grid">
           <div v-for="row in resultRows" :key="row.label" class="result-card liquid-card">
-            <div class="readable-layer">
+            <div class="result-inner">
               <div class="result-value">
                 <span class="result-number">{{ row.fmt(result) }}</span>
                 <span v-if="row.unit" class="result-unit">{{ row.unit }}</span>
@@ -1017,6 +1029,8 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
             </div>
           </div>
         </div>
+
+        <hr class="output-divider" />
 
         <div class="apply-section">
           <div class="apply-header">
@@ -1196,7 +1210,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   border-radius: 12px;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #6b7d92;
+  color: #333333;
   cursor: pointer;
   transition: all 0.2s ease;
   background: transparent;
@@ -1216,7 +1230,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   padding: 8px 18px;
   border-radius: 20px;
   font-size: 0.825rem;
-  color: #1f2937;
+  color: #222222;
   flex: 1;
 }
 
@@ -1260,25 +1274,44 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .actions-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   justify-content: flex-end;
   align-items: center;
 }
 
+.actions-row-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-tight {
+  padding: 0 14px;
+  font-size: 0.78rem;
+}
+
+.output-divider {
+  height: 1px;
+  border: none;
+  background: linear-gradient(90deg, transparent, rgba(180, 195, 215, 0.35) 15%, rgba(180, 195, 215, 0.35) 85%, transparent);
+  margin: 0;
+}
+
 .panel-title {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111827;
   margin: 0;
   letter-spacing: -0.015em;
 }
 
 .panel-subtitle {
-  font-size: 0.78rem;
-  color: #334155;
+  font-size: 0.82rem;
+  color: #374151;
   font-weight: 500;
   display: block;
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 /* ── Quick Flow ── */
@@ -1348,7 +1381,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .quick-title {
   font-size: 0.88rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
   text-align: center;
 }
@@ -1366,7 +1399,12 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   padding: 16px 18px;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.40),
+    0 2px 10px rgba(0, 0, 0, 0.04);
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
@@ -1374,23 +1412,33 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .quick-card:hover {
-  background: rgba(255, 255, 255, 0.35);
-  border-color: rgba(255, 255, 255, 0.58);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.34);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.50),
+    0 4px 16px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
 }
 
 .quick-card.selected {
-  background: rgba(80, 110, 140, 0.12);
-  border-color: rgba(91, 122, 154, 0.5);
-  box-shadow: 0 2px 12px rgba(63, 98, 132, 0.12);
+  background: rgba(91, 122, 154, 0.12);
+  border-color: rgba(91, 122, 154, 0.52);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.40),
+    0 3px 14px rgba(63, 98, 132, 0.14);
 }
 
 .quick-card-icon {
   width: 44px;
   height: 44px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.36);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.50);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.48),
+    0 2px 6px rgba(0, 0, 0, 0.04);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1409,12 +1457,12 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .quick-card-label {
   font-size: 0.9rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
 }
 
 .quick-card-desc {
   font-size: 0.75rem;
-  color: #5a6775;
+  color: #333333;
   font-weight: 500;
 }
 
@@ -1475,7 +1523,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .field-label {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #334155;
+  color: #222222;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   display: flex;
@@ -1494,7 +1542,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   padding: 10px 14px;
   border-radius: 12px;
   font-size: 0.9rem;
-  color: #2d3748;
+  color: #222222;
   font-family: inherit;
   width: 100%;
 }
@@ -1553,7 +1601,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   display: flex;
   justify-content: space-between;
   font-size: 0.65rem;
-  color: #334155;
+  color: #222222;
   margin-top: 2px;
 }
 
@@ -1578,9 +1626,9 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 18, 32, 0.35);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(10, 18, 32, 0.30);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
   padding: 20px;
 }
 
@@ -1604,13 +1652,13 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .preset-title {
   font-size: 1.05rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
 .preset-loading {
   font-size: 0.85rem;
-  color: #7b8ea0;
+  color: #333333;
   font-weight: 500;
   text-align: center;
   padding: 20px;
@@ -1632,15 +1680,23 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   transition: all 0.2s ease;
   text-align: left;
   font-family: inherit;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    0 2px 8px rgba(0, 0, 0, 0.035);
   position: relative;
 }
 
 .preset-card:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255, 255, 255, 0.52);
   transform: translateY(-2px);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.48),
+    0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 .preset-card:active:not(:disabled) {
@@ -1650,7 +1706,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .preset-card-title {
   font-size: 0.88rem;
   font-weight: 640;
-  color: #0f1720;
+  color: #111111;
 }
 
 .preset-card-desc {
@@ -1677,7 +1733,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   top: 50%;
   right: 14px;
   transform: translateY(-50%);
-  color: #8b95a1;
+  color: #333333;
   pointer-events: none;
 }
 
@@ -1703,7 +1759,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   font-size: 0.8rem;
   font-weight: 600;
   font-family: inherit;
-  color: #6b7d92;
+  color: #333333;
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.3);
   cursor: pointer;
@@ -1712,7 +1768,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 
 .preset-cancel:hover {
   background: rgba(255, 255, 255, 0.32);
-  color: #334155;
+  color: #222222;
 }
 
 /* ── Tune Personality ── */
@@ -1721,8 +1777,13 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   z-index: 2;
   padding: 20px 22px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 3px 12px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1738,7 +1799,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .personality-title {
   font-size: 0.95rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
   line-height: 1.2;
 }
@@ -1756,7 +1817,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .personality-summary {
   font-size: 0.82rem;
   line-height: 1.65;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
 }
@@ -1776,7 +1837,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   gap: 8px;
   font-size: 0.78rem;
   line-height: 1.55;
-  color: #475569;
+  color: #333333;
   font-weight: 500;
 }
 
@@ -1815,7 +1876,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .apply-title {
   font-size: 0.9rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -1884,7 +1945,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .step-title {
   font-size: 0.82rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -1913,7 +1974,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .saved-title {
   font-size: 0.88rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -1968,7 +2029,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .saved-personality {
   font-size: 0.8rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
 }
 
 .saved-badges {
@@ -2002,13 +2063,13 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .saved-date {
   font-size: 0.62rem;
   font-weight: 500;
-  color: #8b95a1;
+  color: #333333;
   flex-shrink: 0;
 }
 
 .saved-meta {
   font-size: 0.68rem;
-  color: #5a6775;
+  color: #333333;
   font-weight: 500;
   line-height: 1.4;
 }
@@ -2120,7 +2181,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .behavior-title {
   font-size: 0.9rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -2147,7 +2208,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   flex-shrink: 0;
   font-size: 0.72rem;
   font-weight: 560;
-  color: #334155;
+  color: #222222;
   text-align: right;
 }
 
@@ -2172,7 +2233,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   flex-shrink: 0;
   font-size: 0.7rem;
   font-weight: 600;
-  color: #334155;
+  color: #222222;
   text-align: left;
   font-variant-numeric: tabular-nums;
 }
@@ -2189,7 +2250,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .insights-title {
   font-size: 0.9rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -2213,8 +2274,13 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   gap: 8px;
   padding: 16px 18px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.20);
+  backdrop-filter: blur(12px) saturate(155%);
+  -webkit-backdrop-filter: blur(12px) saturate(155%);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .insight-header {
@@ -2227,7 +2293,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .insight-title {
   font-size: 0.82rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
 }
 
 .insight-severity {
@@ -2261,7 +2327,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .insight-desc {
   font-size: 0.75rem;
   line-height: 1.6;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
 }
@@ -2295,7 +2361,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .compare-title {
   font-size: 0.88rem;
   font-weight: 650;
-  color: #0f1720;
+  color: #111111;
   margin: 0 0 14px;
 }
 
@@ -2308,8 +2374,13 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .compare-card {
   padding: 16px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.03);
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -2338,7 +2409,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .compare-card-label {
   font-size: 0.82rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
 }
 
 .compare-check {
@@ -2399,7 +2470,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .compare-recommend-label {
   font-size: 0.58rem;
   font-weight: 550;
-  color: #8b95a1;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -2407,7 +2478,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .compare-recommend-text {
   font-size: 0.65rem;
   font-weight: 520;
-  color: #5a6775;
+  color: #333333;
   line-height: 1.45;
 }
 
@@ -2422,14 +2493,16 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .result-card {
-  padding: 12px;
+  padding: 16px 18px;
   border-radius: 18px;
 }
 
-.result-card .readable-layer {
+.result-inner {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  position: relative;
+  z-index: 2;
 }
 
 .result-value {
@@ -2444,7 +2517,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .result-number {
   font-size: 1.1rem;
   font-weight: 660;
-  color: #0f1720;
+  color: #111111;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
   word-break: break-word;
@@ -2454,7 +2527,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .result-unit {
   font-size: 0.73rem;
   font-weight: 580;
-  color: #334155;
+  color: #222222;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
@@ -2462,7 +2535,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .result-label {
   font-size: 0.78rem;
   font-weight: 620;
-  color: #0f1720;
+  color: #111111;
   line-height: 1.3;
   position: relative;
   z-index: 2;
@@ -2471,7 +2544,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .result-desc {
   font-size: 0.72rem;
   font-weight: 550;
-  color: #334155;
+  color: #222222;
   position: relative;
   z-index: 2;
 }
@@ -2512,11 +2585,20 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   }
 
   .actions-row {
-    justify-content: stretch;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
   }
 
-  .actions-row button {
-    width: 100%;
+  .actions-row-secondary {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .actions-row-secondary button {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.75rem;
   }
 }
 

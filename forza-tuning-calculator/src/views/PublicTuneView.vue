@@ -318,13 +318,13 @@ function handleExport() {
 .pt-state-title {
   font-size: 1.15rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
 .pt-state-desc {
   font-size: 0.85rem;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
   line-height: 1.55;
@@ -398,7 +398,7 @@ function handleExport() {
 .pt-title {
   font-size: 1.4rem;
   font-weight: 720;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
   line-height: 1.2;
   letter-spacing: -0.015em;
@@ -427,13 +427,13 @@ function handleExport() {
   border-radius: 20px;
   font-size: 0.72rem;
   font-weight: 600;
-  color: #334155;
+  color: #222222;
 }
 
 .pt-notes {
   font-size: 0.85rem;
   line-height: 1.6;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 8px 0 0;
   white-space: pre-wrap;
@@ -456,7 +456,7 @@ function handleExport() {
 .pt-section-title {
   font-size: 0.95rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
@@ -477,21 +477,21 @@ function handleExport() {
 
 .pt-value-label {
   font-size: 0.76rem;
-  font-weight: 520;
-  color: #556677;
+  font-weight: 500;
+  color: #111111;
 }
 
 .pt-value-num {
   font-size: 0.82rem;
   font-weight: 640;
-  color: #0f1720;
+  color: #111111;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .pt-value-unit {
-  font-weight: 520;
-  color: #8899aa;
+  font-weight: 500;
+  color: #222222;
 }
 
 /* ── Actions ── */

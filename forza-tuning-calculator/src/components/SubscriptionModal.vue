@@ -79,9 +79,9 @@ defineEmits(['close'])
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 18, 32, 0.35);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(10, 18, 32, 0.30);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
   padding: 20px;
 }
 
@@ -123,7 +123,7 @@ defineEmits(['close'])
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b7d92;
+  color: #333333;
   cursor: pointer;
   transition: all 0.15s ease;
   background: transparent;
@@ -132,13 +132,13 @@ defineEmits(['close'])
 
 .sm-close:hover {
   background: rgba(255, 255, 255, 0.3);
-  color: #0f1720;
+  color: #111111;
 }
 
 .sm-title {
   font-size: 1.05rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
   position: relative;
   z-index: 2;
@@ -147,7 +147,7 @@ defineEmits(['close'])
 .sm-desc {
   font-size: 0.85rem;
   line-height: 1.6;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
   position: relative;
@@ -186,19 +186,19 @@ defineEmits(['close'])
 .sm-plan-name {
   font-size: 0.95rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
 }
 
 .sm-plan-price {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #0f1720;
+  color: #111111;
 }
 
 .sm-plan-period {
   font-size: 0.72rem;
   font-weight: 520;
-  color: #6b7d92;
+  color: #333333;
 }
 
 .sm-features {
@@ -216,7 +216,7 @@ defineEmits(['close'])
   gap: 8px;
   font-size: 0.82rem;
   font-weight: 520;
-  color: #334155;
+  color: #222222;
 }
 
 .sm-feature svg {

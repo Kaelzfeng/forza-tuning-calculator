@@ -268,7 +268,7 @@ watch(user, (u) => {
 .page-heading {
   font-size: 1.6rem;
   font-weight: 720;
-  color: #0f1720;
+  color: #111111;
   letter-spacing: -0.02em;
   margin: 0 0 8px;
   text-align: center;
@@ -277,14 +277,14 @@ watch(user, (u) => {
 .section-desc {
   font-size: 0.88rem;
   line-height: 1.6;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
 }
 
 .section-loading {
   font-size: 0.85rem;
-  color: #7b8ea0;
+  color: #333333;
   font-weight: 500;
 }
 
@@ -311,7 +311,7 @@ watch(user, (u) => {
 
 .state-text {
   font-size: 0.88rem;
-  color: #8b95a1;
+  color: #333333;
   font-weight: 500;
   margin: 0;
 }
@@ -350,7 +350,7 @@ watch(user, (u) => {
 .build-name {
   font-size: 0.9rem;
   font-weight: 620;
-  color: #1f2937;
+  color: #222222;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -365,7 +365,7 @@ watch(user, (u) => {
 .build-date {
   font-size: 0.72rem;
   font-weight: 500;
-  color: #8b95a1;
+  color: #333333;
 }
 
 .build-actions {
@@ -385,7 +385,7 @@ watch(user, (u) => {
   padding: 11px 16px;
   border-radius: 12px;
   font-size: 0.9rem;
-  color: #2d3748;
+  color: #222222;
   font-family: inherit;
   width: 100%;
 }
@@ -403,14 +403,14 @@ watch(user, (u) => {
 .login-sent {
   font-size: 0.88rem;
   line-height: 1.6;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
 }
 
 .login-sent-sub {
   font-size: 0.78rem;
-  color: #8b95a1;
+  color: #333333;
   margin: 0;
 }
 
@@ -422,9 +422,9 @@ watch(user, (u) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 18, 32, 0.35);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(10, 18, 32, 0.30);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
   padding: 20px;
 }
 
@@ -441,7 +441,7 @@ watch(user, (u) => {
 .confirm-text {
   font-size: 0.9rem;
   font-weight: 580;
-  color: #1f2937;
+  color: #222222;
   margin: 0;
   position: relative;
   z-index: 2;
@@ -460,16 +460,19 @@ watch(user, (u) => {
   border-radius: 10px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #6b7d92;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #333333;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.36);
   cursor: pointer;
   font-family: inherit;
 }
 
 .confirm-cancel:hover {
-  background: rgba(255, 255, 255, 0.32);
-  color: #334155;
+  background: rgba(255, 255, 255, 0.34);
+  border-color: rgba(255, 255, 255, 0.48);
+  color: #222222;
 }
 
 @media (max-width: 640px) {

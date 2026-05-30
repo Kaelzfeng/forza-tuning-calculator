@@ -135,7 +135,7 @@ async function handleUpgrade() {
 .upgrade-title {
   font-size: 1.55rem;
   font-weight: 720;
-  color: #0f1720;
+  color: #111111;
   letter-spacing: -0.02em;
   margin: 0;
   line-height: 1.2;
@@ -144,7 +144,7 @@ async function handleUpgrade() {
 .upgrade-subtitle {
   font-size: 0.9rem;
   line-height: 1.6;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
 }
@@ -176,7 +176,7 @@ async function handleUpgrade() {
   display: flex;
   align-items: baseline;
   gap: 2px;
-  color: #0f1720;
+  color: #111111;
 }
 
 .price-currency {
@@ -215,7 +215,7 @@ async function handleUpgrade() {
   gap: 10px;
   font-size: 0.88rem;
   font-weight: 570;
-  color: #1f2937;
+  color: #222222;
 }
 
 .feature-check {

@@ -134,7 +134,7 @@ async function handleSignOut() {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #7b8ea0;
+  color: #333333;
 }
 
 .auth-spinner {
@@ -147,6 +147,8 @@ async function handleSignOut() {
 
 /* ── Login button ── */
 .auth-login-btn {
+  position: relative;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -184,7 +186,7 @@ async function handleSignOut() {
 .auth-email {
   font-size: 0.75rem;
   font-weight: 550;
-  color: #334155;
+  color: #222222;
   max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -192,16 +194,24 @@ async function handleSignOut() {
 }
 
 .auth-logout-btn {
+  position: relative;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  color: #8b95a1;
+  color: #333333;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
+}
+
+.auth-logout-btn svg {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .auth-logout-btn:hover {
@@ -217,9 +227,9 @@ async function handleSignOut() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 18, 32, 0.35);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(10, 18, 32, 0.30);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
   padding: 20px;
 }
 
@@ -236,28 +246,28 @@ async function handleSignOut() {
 .ab-title {
   font-size: 1rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
 .ab-desc {
   font-size: 0.82rem;
   line-height: 1.5;
-  color: #5a6775;
+  color: #333333;
   font-weight: 500;
   margin: 0;
 }
 
 .ab-desc-sub {
   font-size: 0.72rem;
-  color: #8b95a1;
+  color: #333333;
 }
 
 .ab-input {
   padding: 10px 14px;
   border-radius: 12px;
   font-size: 0.9rem;
-  color: #2d3748;
+  color: #222222;
   font-family: inherit;
   width: 100%;
 }
@@ -283,16 +293,19 @@ async function handleSignOut() {
   border-radius: 10px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #6b7d92;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #333333;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.36);
   cursor: pointer;
   font-family: inherit;
 }
 
 .ab-cancel:hover {
-  background: rgba(255, 255, 255, 0.32);
-  color: #334155;
+  background: rgba(255, 255, 255, 0.34);
+  border-color: rgba(255, 255, 255, 0.48);
+  color: #222222;
 }
 
 .ab-send {

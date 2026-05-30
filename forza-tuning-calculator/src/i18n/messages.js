@@ -145,7 +145,7 @@ zh: {
     tunePersonality:'调教个性',
     savedBuilds:'已收藏方案', syncing:'同步中...', load_button:'加载', view:'查看', publish:'发布', cloud:'云端', local:'本地', delete_button:'删除',
     drivetrain:'驱动形式', buildType:'改装类型', drivingStyle:'驾驶风格', classTier:'等级', tireCompound:'轮胎类型',
-    weightKg:'重量 (kg)', powerHp:'马力 (HP)', frontWeight:'前轴配重',
+    weightKg:'重量 (kg)', powerHp:'马力 (HP)', frontWeight:'前轴配重 %',
     label_tirePressure:'胎压', label_finalDrive:'终传比', label_camber:'外倾角', label_toe:'前束角',
     label_antiRollBars:'防倾杆', label_springs:'弹簧', label_rideHeight:'车身高度',
     label_brakeBalance:'制动力分配', label_brakePressure:'制动压力',

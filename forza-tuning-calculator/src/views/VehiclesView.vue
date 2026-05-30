@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '../lib/supabase.js'
 import VehicleCard from '../components/VehicleCard.vue'
@@ -19,6 +19,28 @@ const search = ref(route.query.search || '')
 const manufacturerFilter = ref(route.query.manufacturer || '')
 const drivetrainFilter = ref(route.query.drivetrain || '')
 const classFilter = ref(route.query.class || '')
+
+// ── Pagination ──
+function getPageSize() {
+  return window.innerWidth <= 768 ? 12 : 24
+}
+const pageSize = ref(getPageSize())
+const visibleCount = ref(pageSize.value)
+
+const visibleVehicles = computed(() => vehicles.value.slice(0, visibleCount.value))
+const hasMoreVehicles = computed(() => visibleCount.value < vehicles.value.length)
+
+function loadMore() {
+  visibleCount.value += pageSize.value
+}
+
+function resetPagination() {
+  visibleCount.value = pageSize.value
+}
+
+function onResize() {
+  pageSize.value = getPageSize()
+}
 
 const manufacturers = computed(() => {
   const set = new Set(vehicles.value.map(v => v.manufacturer).filter(Boolean))
@@ -46,6 +68,7 @@ async function fetchVehicles() {
 
       if (!fetchError && data?.length) {
         vehicles.value = data
+        resetPagination()
         loading.value = false
         return
       }
@@ -85,6 +108,7 @@ async function fetchVehicles() {
         }))
         .sort((a, b) => a.manufacturer.localeCompare(b.manufacturer))
 
+      resetPagination()
       loading.value = false
       return
     }
@@ -118,14 +142,19 @@ function clearFilters() {
 let searchTimer = null
 watch(search, () => {
   clearTimeout(searchTimer)
-  searchTimer = setTimeout(applyFilters, 300)
+  searchTimer = setTimeout(applyFilters, 200)
 })
 
 watch([manufacturerFilter, drivetrainFilter, classFilter], () => {
   applyFilters()
 })
 
+watch([manufacturerFilter, drivetrainFilter, classFilter, search], () => {
+  resetPagination()
+})
+
 onMounted(() => {
+  window.addEventListener('resize', onResize)
   useSeoMeta({
     title: 'Vehicle Tuning Database — Forza Tuning Calculator',
     description: 'Browse the complete Forza vehicle tuning database. Find community tunes for every car — Road, Drift, Drag, Dirt. Filter by manufacturer, drivetrain, and class.',
@@ -134,6 +163,10 @@ onMounted(() => {
   })
   fetchVehicles()
 })
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onResize)
+})
 </script>
 
 <template>
@@ -141,6 +174,7 @@ onMounted(() => {
     <div class="vp-hero">
       <h1 class="vp-title">{{ t('vehicles.title') }}</h1>
       <p class="vp-subtitle">{{ t('vehicles.subtitle') }}</p>
+      <p v-if="!loading && vehicles.length > 0" class="vp-count">{{ vehicles.length }} vehicles in database</p>
     </div>
 
     <!-- Filters -->
@@ -191,7 +225,7 @@ onMounted(() => {
 
     <!-- Loading -->
     <div v-if="loading" class="vp-grid">
-      <div v-for="n in 6" :key="n" class="vp-skeleton liquid-panel">
+      <div v-for="n in pageSize" :key="n" class="vp-skeleton liquid-panel">
         <div class="sk-thumb"></div>
         <div class="sk-lines">
           <div class="sk-row sk-short"></div>
@@ -225,10 +259,27 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Grid -->
-    <div v-else class="vp-grid">
-      <VehicleCard v-for="v in vehicles" :key="v.id" :vehicle="v" :tune-count="0" />
-    </div>
+    <!-- Grid + Load More -->
+    <template v-else>
+      <div class="vp-grid">
+        <VehicleCard v-for="v in visibleVehicles" :key="v.id" :vehicle="v" :tune-count="0" />
+      </div>
+
+      <div v-if="hasMoreVehicles" class="vp-load-more">
+        <p class="vp-showing">
+          Showing {{ visibleVehicles.length }} of {{ vehicles.length }} vehicles
+        </p>
+        <button
+          class="btn-secondary"
+          @click="loadMore"
+        >
+          Load More Vehicles
+        </button>
+      </div>
+      <div v-else class="vp-load-more vp-load-more-end">
+        <p class="vp-showing">All {{ vehicles.length }} vehicles loaded</p>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -238,9 +289,9 @@ onMounted(() => {
   flex-direction: column;
   gap: 24px;
   padding: 24px;
-  padding-top: 40px;
+  padding-top: 48px;
   padding-bottom: 80px;
-  max-width: 960px;
+  max-width: 1000px;
   margin: 0 auto;
   width: 100%;
 }
@@ -249,22 +300,30 @@ onMounted(() => {
 .vp-hero {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .vp-title {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 720;
-  color: #0f1720;
+  color: #111827;
   margin: 0;
   letter-spacing: -0.02em;
 }
 
 .vp-subtitle {
-  font-size: 0.9rem;
-  color: #334155;
+  font-size: 0.95rem;
+  color: #374151;
   font-weight: 500;
   margin: 0;
+  line-height: 1.5;
+}
+
+.vp-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b859e;
+  margin: 4px 0 0;
 }
 
 /* ── Filters ── */
@@ -272,7 +331,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 16px;
+  padding: 12px 18px;
   border-radius: 18px;
   flex-wrap: wrap;
   position: relative;
@@ -288,7 +347,7 @@ onMounted(() => {
 }
 
 .vp-search-icon {
-  color: #8b95a1;
+  color: #6b7280;
   flex-shrink: 0;
 }
 
@@ -297,20 +356,21 @@ onMounted(() => {
   border: none;
   background: transparent;
   font-size: 0.85rem;
-  color: #2d3748;
+  color: #111827;
   font-family: inherit;
   outline: none;
 }
 
 .vp-search-input::placeholder {
-  color: #8b95a1;
+  color: #6b7280;
 }
 
 .vp-filter-select {
-  padding: 7px 32px 7px 12px;
+  padding: 8px 32px 8px 12px;
+  min-height: 40px;
   border-radius: 10px;
-  font-size: 0.75rem;
-  color: #334155;
+  font-size: 0.78rem;
+  color: #111827;
   font-family: inherit;
   font-weight: 550;
   appearance: none;
@@ -323,13 +383,14 @@ onMounted(() => {
 }
 
 .vp-clear-btn {
-  padding: 6px 14px;
+  padding: 8px 16px;
+  min-height: 40px;
   border-radius: 10px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  color: #7b8ea0;
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #4b5563;
+  background: rgba(255, 255, 255, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.38);
   cursor: pointer;
   transition: all 0.15s ease;
   font-family: inherit;
@@ -337,8 +398,8 @@ onMounted(() => {
 }
 
 .vp-clear-btn:hover {
-  background: rgba(255, 255, 255, 0.35);
-  color: #334155;
+  background: rgba(255, 255, 255, 0.40);
+  color: #111827;
 }
 
 /* ── Grid ── */
@@ -410,13 +471,13 @@ onMounted(() => {
 .vp-state-title {
   font-size: 1.05rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111827;
   margin: 0;
 }
 
 .vp-state-desc {
   font-size: 0.85rem;
-  color: #334155;
+  color: #374151;
   font-weight: 500;
   margin: 0;
   line-height: 1.5;
@@ -428,8 +489,8 @@ onMounted(() => {
   font-size: 0.82rem;
   font-weight: 600;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.30);
+  border: 1px solid rgba(255, 255, 255, 0.40);
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
@@ -437,8 +498,28 @@ onMounted(() => {
 }
 
 .vp-retry-btn:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.40);
   color: #2d4a63;
+}
+
+/* ── Load More ── */
+.vp-load-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-top: 16px;
+}
+
+.vp-load-more-end {
+  padding-top: 8px;
+}
+
+.vp-showing {
+  font-size: 0.80rem;
+  font-weight: 550;
+  color: #4b5563;
+  margin: 0;
 }
 
 /* ── Mobile ── */

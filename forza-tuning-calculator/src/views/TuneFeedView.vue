@@ -201,7 +201,7 @@ onMounted(() => {
 .feed-title {
   font-size: 1.5rem;
   font-weight: 720;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
   letter-spacing: -0.02em;
 }
@@ -229,7 +229,7 @@ onMounted(() => {
 
 .feed-subtitle {
   font-size: 0.9rem;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
 }
@@ -286,13 +286,13 @@ onMounted(() => {
 .feed-state-title {
   font-size: 1.1rem;
   font-weight: 680;
-  color: #0f1720;
+  color: #111111;
   margin: 0;
 }
 
 .feed-state-desc {
   font-size: 0.85rem;
-  color: #334155;
+  color: #222222;
   font-weight: 500;
   margin: 0;
   line-height: 1.55;
@@ -374,7 +374,7 @@ onMounted(() => {
 .feed-end-text {
   font-size: 0.75rem;
   font-weight: 500;
-  color: #8b95a1;
+  color: #333333;
 }
 
 /* ── Mobile ── */
