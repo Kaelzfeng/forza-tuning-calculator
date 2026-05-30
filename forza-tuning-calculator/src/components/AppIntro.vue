@@ -2,18 +2,25 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const STORAGE_KEY = 'forza_tune_intro_seen'
+const MAX_INTRO_MS = 2500
 
 const visible = ref(false)
 const exiting = ref(false)
 
 let exitTimer = null
+let fallbackTimer = null
 
-function skip() {
+function close() {
   if (exiting.value) return
   exiting.value = true
+  clearTimeout(fallbackTimer)
   exitTimer = setTimeout(() => {
     visible.value = false
   }, 400)
+}
+
+function skip() {
+  close()
 }
 
 function onKeydown(e) {
@@ -21,7 +28,12 @@ function onKeydown(e) {
 }
 
 function onVideoEnded() {
-  skip()
+  close()
+}
+
+function onVideoError() {
+  // Video failed to load or play — close immediately
+  close()
 }
 
 onMounted(() => {
@@ -32,11 +44,14 @@ onMounted(() => {
 
   visible.value = true
   window.addEventListener('keydown', onKeydown)
+  // Fallback: always close after MAX_INTRO_MS regardless of video state
+  fallbackTimer = setTimeout(close, MAX_INTRO_MS)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
   clearTimeout(exitTimer)
+  clearTimeout(fallbackTimer)
 })
 </script>
 
@@ -56,9 +71,11 @@ onBeforeUnmount(() => {
         muted
         playsinline
         @ended="onVideoEnded"
+        @error="onVideoError"
+        @stalled="close"
       />
 
-      <button class="skip-btn liquid-glass" @click.stop="skip">
+      <button class="skip-btn" @click.stop="skip">
         Skip &rarr;
       </button>
     </div>
