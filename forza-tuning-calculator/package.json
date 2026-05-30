@@ -1,0 +1,30 @@
+{
+  "name": "forza-tuning-calculator",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prerender:routes": "node scripts/generate-prerender-routes.mjs",
+    "prerender": "node scripts/prerender.mjs",
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "test:paddle-webhook": "node scripts/test-paddle-webhook.mjs",
+    "build:seo": "node scripts/copy-local-data.mjs && vite build && npm run prerender:routes && npm run sitemap && npm run prerender",
+    "check:supabase": "node scripts/check-supabase-env.mjs",
+    "deploy:paddle-webhook": "node scripts/deploy-paddle-webhook.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.106.2",
+    "vue": "^3.5.34",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "dotenv": "^17.4.2",
+    "puppeteer": "^25.1.0",
+    "sharp": "^0.34.5",
+    "vite": "^8.0.12"
+  }
+}

@@ -1,0 +1,114 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+   ═══════════════════════════════════════════════════════
+   Cinematic Background — 4-Layer Optical System
+   ═══════════════════════════════════════════════════════
+
+   Layer 1 — body background-image (original, sharp, fixed)
+   Layer 2 — body::before (blur 10px, scale 1.05, low opacity bleed)
+   Layer 3 — body::after (pearl-white / ice-blue / lavender overlay + vignette)
+   Layer 4 — #app content with Liquid Glass UI panels
+*/
+
+/* ── Layer 1: Original background image ── */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #1f2937;
+  min-height: 100svh;
+  position: relative;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.18);
+
+  /* Layer 1: cinematic image on top, fallback gradients behind */
+  background:
+    url('/cinematic-bg.webp') center / cover no-repeat fixed,
+    /* fallback gradients if image fails to load */
+    radial-gradient(ellipse 85% 65% at 80% -5%, rgba(145, 185, 225, 0.62), transparent),
+    radial-gradient(ellipse 75% 70% at 5% 95%, rgba(180, 162, 220, 0.55), transparent),
+    radial-gradient(ellipse 50% 55% at 50% 40%, rgba(235, 238, 250, 0.55), transparent),
+    radial-gradient(ellipse 58% 48% at 48% -6%, rgba(210, 222, 248, 0.52), transparent),
+    radial-gradient(ellipse 38% 42% at 70% 55%, rgba(250, 244, 246, 0.4), transparent),
+    radial-gradient(ellipse 42% 38% at 20% 30%, rgba(168, 198, 232, 0.36), transparent),
+    linear-gradient(180deg, #f4f5fa 0%, #f0f2f8 30%, #f3f4fa 55%, #f5f7fb 100%);
+}
+
+/* ── Layer 2: Blur layer (cinematic depth bleed) ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -5%;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url('/cinematic-bg.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  filter: blur(10px) brightness(1.04);
+  transform: scale(1.05);
+  opacity: 0.22;
+}
+
+/* ── Layer 3: Soft translucent overlay + vignette ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    /* vignette — darker edges for focal depth */
+    radial-gradient(ellipse 62% 58% at 50% 40%, transparent 42%, rgba(14, 18, 32, 0.18) 100%),
+    /* hero area — brighter top-center focal glow */
+    radial-gradient(ellipse 46% 36% at 50% 20%, rgba(255, 255, 255, 0.06), transparent 65%);
+}
+
+#app {
+  min-height: 100svh;
+  position: relative;
+  z-index: 1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ── Disable fixed attachment on mobile for performance ── */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  body::before {
+    background-attachment: scroll;
+  }
+}

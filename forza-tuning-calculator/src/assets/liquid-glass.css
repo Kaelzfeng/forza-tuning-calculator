@@ -1,0 +1,335 @@
+/* ══════════════════════════════════════════════════════════════
+   8-Layer Liquid Glass Optical System — Optical Polish Pass
+
+   Layer 1 — Background (style.css)
+   Layer 2 — Translucent Base (rgba 0.12-0.18 + blur + saturate + contrast)
+   Layer 3 — Edge Refraction (::before — top/left bright + chromatic fringe)
+   Layer 4 — Specular Highlight (::after — diagonal sheen + radial spot)
+   Layer 5 — Inner Glow (inset shadows — top bright, bottom subtle dark)
+   Layer 6 — Depth Shadow (soft, large-radius outer shadows)
+   Layer 7 — Content (typography elevated above optical layers)
+   Layer 8 — Motion (hover sheen shift, press compression)
+   ══════════════════════════════════════════════════════════════ */
+
+:root {
+  --glass-blur: blur(32px) saturate(200%) contrast(110%);
+  --glass-blur-light: blur(20px) saturate(180%) contrast(105%);
+  --glass-blur-micro: blur(12px) saturate(160%);
+}
+
+/* ═══════════════════════════════════════════
+   .liquid-glass — small elements (badges, pills, tip bars)
+   ═══════════════════════════════════════════ */
+.liquid-glass {
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.14));
+  backdrop-filter: var(--glass-blur-light);
+  -webkit-backdrop-filter: var(--glass-blur-light);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.58),
+    inset 0 -1px 0 rgba(80, 110, 150, 0.04),
+    0 2px 10px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* ═══════════════════════════════════════════
+   .liquid-panel — large surfaces (hero, nav, about, calc panels)
+   Lower opacity + stronger optical effects for max background penetration.
+   ═══════════════════════════════════════════ */
+.liquid-panel {
+  position: relative;
+  overflow: hidden;
+  /* Layer 2 — readability gradient base */
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.14));
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  /* Layer 5 + 6 */
+  box-shadow:
+    /* inner glow — top bright */
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    /* inner glow — bottom subtle dark */
+    inset 0 -1px 0 rgba(80, 110, 150, 0.05),
+    /* internal edge ring */
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    /* depth — soft large shadow */
+    0 6px 32px rgba(0, 0, 0, 0.06),
+    0 2px 6px rgba(0, 0, 0, 0.04),
+    /* outer edge glow ring */
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Layer 3 — Edge Refraction (toned down) */
+.liquid-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    /* top edge */
+    linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(180, 210, 240, 0.07) 1px, transparent 2.5px),
+    /* left edge */
+    linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0%, transparent 3px),
+    /* bottom edge */
+    linear-gradient(0deg, rgba(80, 110, 150, 0.05) 0%, transparent 2px),
+    /* right edge */
+    linear-gradient(270deg, rgba(255, 255, 255, 0.12) 0%, transparent 2px);
+}
+
+/* Layer 4 — Specular Highlight (toned down, kept clear of text zone) */
+.liquid-panel::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    /* diagonal sheen — upper-left corner only, stays out of content area */
+    linear-gradient(148deg, rgba(255, 255, 255, 0.10) 0%, transparent 38%),
+    /* broad radial highlight — top edge only */
+    radial-gradient(ellipse 55% 16% at 50% 3%, rgba(255, 255, 255, 0.08), transparent),
+    /* micro spot — subtle */
+    radial-gradient(ellipse 14% 4% at 48% 2%, rgba(255, 255, 255, 0.10), transparent);
+}
+
+/* ═══════════════════════════════════════════
+   .liquid-card — interactive cards (mode cards, result cards)
+   Non-uniform interior with sheen shift on hover.
+   ═══════════════════════════════════════════ */
+.liquid-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  /* Layer 2 — readability gradient: darker at bottom for text stability */
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.13));
+  backdrop-filter: var(--glass-blur-light);
+  -webkit-backdrop-filter: var(--glass-blur-light);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.52),
+    inset 0 -1px 0 rgba(80, 110, 150, 0.04),
+    0 4px 18px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.4s ease,
+    background 0.35s ease,
+    border-color 0.35s ease;
+}
+
+/* Layer 3 — Edge Refraction (toned down) */
+.liquid-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.34) 0%, rgba(180,210,240,0.05) 1px, transparent 2px),
+    linear-gradient(90deg, rgba(255,255,255,0.13) 0%, transparent 2.5px),
+    linear-gradient(0deg, rgba(80,110,150,0.04) 0%, transparent 1.5px),
+    linear-gradient(270deg, rgba(255,255,255,0.09) 0%, transparent 2px);
+  transition: opacity 0.35s ease;
+}
+
+/* Layer 4 — Specular Highlight (toned down, kept at top edge) */
+.liquid-card::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    /* diagonal sheen — top-left corner only */
+    linear-gradient(152deg, rgba(255,255,255,0.08) 0%, transparent 36%),
+    /* broad radial highlight — top edge */
+    radial-gradient(ellipse 50% 14% at 50% 2%, rgba(255,255,255,0.06), transparent),
+    /* micro spot — subtle */
+    radial-gradient(ellipse 14% 4% at 48% 1%, rgba(255,255,255,0.08), transparent);
+  transition: opacity 0.35s ease, background 0.3s ease;
+}
+
+/* Layer 8 — hover: subtle lift, sheen stays restrained */
+.liquid-card:hover {
+  transform: translateY(-4px);
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.16));
+  border-color: rgba(255, 255, 255, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(80, 110, 150, 0.04),
+    0 14px 40px rgba(0, 0, 0, 0.07),
+    0 4px 10px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* hover: sheen stays restrained */
+.liquid-card:hover::after {
+  background:
+    linear-gradient(150deg, rgba(255,255,255,0.11) 0%, transparent 40%),
+    radial-gradient(ellipse 52% 16% at 50% 2%, rgba(255,255,255,0.08), transparent),
+    radial-gradient(ellipse 14% 4% at 48% 2%, rgba(255,255,255,0.12), transparent);
+}
+
+/* ═══════════════════════════════════════════
+   .liquid-sheen — floating specular overlay element
+   ═══════════════════════════════════════════ */
+.liquid-sheen {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 50% 30% at 50% 0%, rgba(255, 255, 255, 0.15), transparent);
+}
+
+/* ═══════════════════════════════════════════
+   .glass-orb — icon container
+   ═══════════════════════════════════════════ */
+.glass-orb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.32);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* ═══════════════════════════════════════════
+   .btn-glass — iOS-style button with liquid sheen
+   ═══════════════════════════════════════════ */
+.btn-glass {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 620;
+  color: #fff;
+  background: linear-gradient(180deg, #7193b3 0%, #52779a 35%, #406485 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 4px 20px rgba(64, 100, 133, 0.35),
+    0 1px 3px rgba(64, 100, 133, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition:
+    transform 0.18s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+/* liquid sheen overlay on button */
+.btn-glass::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 45%),
+    radial-gradient(ellipse 60% 30% at 50% 5%, rgba(255,255,255,0.1), transparent);
+  transition: opacity 0.18s ease;
+}
+
+.btn-glass:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow:
+    0 8px 32px rgba(64, 100, 133, 0.45),
+    0 2px 6px rgba(64, 100, 133, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.btn-glass:hover::after {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.24) 0%, transparent 48%),
+    radial-gradient(ellipse 60% 30% at 50% 5%, rgba(255,255,255,0.14), transparent);
+}
+
+.btn-glass:active {
+  transform: translateY(0) scale(0.965);
+  filter: brightness(0.94);
+  transition: transform 0.08s ease, filter 0.08s ease;
+}
+
+/* ═══════════════════════════════════════════
+   .input-glass — form inputs
+   ═══════════════════════════════════════════ */
+.input-glass {
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(80, 110, 150, 0.04);
+  outline: none;
+  color: #2d3748;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.input-glass:hover {
+  background: rgba(255, 255, 255, 0.35);
+  border-color: rgba(140, 160, 185, 0.45);
+}
+
+.input-glass:focus {
+  border-color: rgba(91, 122, 154, 0.48);
+  box-shadow:
+    0 0 0 3px rgba(91, 122, 154, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.52);
+  background: rgba(255, 255, 255, 0.42);
+}
+
+/* ═══════════════════════════════════════════
+   .readable-layer — inner content backplate
+   ═══════════════════════════════════════════ */
+.readable-layer {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  padding: 12px 14px;
+}
+
+/* ── Mobile: reduce backdrop-filter blur for scroll performance ── */
+@media (max-width: 768px) {
+  .liquid-panel {
+    backdrop-filter: blur(16px) saturate(140%) contrast(102%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%) contrast(102%);
+  }
+
+  .liquid-glass {
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+  }
+
+  .liquid-card {
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+  }
+}
