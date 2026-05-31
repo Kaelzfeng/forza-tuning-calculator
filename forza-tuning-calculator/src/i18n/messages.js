@@ -90,6 +90,7 @@ export default { en: {
     statsTitle:'Vehicle Stats', horsepower:'Horsepower', weight:'Weight', drivetrain:'Drivetrain',
     vehicleClass:'Class', writeComment:'Write a comment', loginToSaveFavorites:'Login to save favorites',
     year:'Year', country:'Country',
+    freeSaveLimitMsg:'Free users can save up to 5 builds. Upgrade to Pro for unlimited saves.',
   },
   tunes: {
     title:'Community Tunes', subtitle:'Latest published setups from the Forza tuning community',
@@ -200,6 +201,7 @@ zh: {
     statsTitle:'车辆数据', horsepower:'马力', weight:'重量', drivetrain:'驱动形式',
     vehicleClass:'等级', writeComment:'发表评论', loginToSaveFavorites:'登录后即可收藏',
     year:'年份', country:'国家',
+    freeSaveLimitMsg:'免费用户最多可保存 5 个调教方案。升级 Pro 可无限保存。',
   },
   tunes: {
     title:'玩家调教分享', subtitle:'来自玩家社区的最新调教方案',

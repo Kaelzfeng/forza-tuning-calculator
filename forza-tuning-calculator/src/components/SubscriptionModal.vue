@@ -24,8 +24,8 @@ defineEmits(['close'])
           </button>
         </div>
 
-        <h2 class="sm-title">Unlock Pro Tunes</h2>
-        <p class="sm-desc">Get full tuning values, copy presets, save favorites, and unlock advanced tune tools.</p>
+        <h2 class="sm-title">Upgrade to Pro</h2>
+        <p class="sm-desc">Unlock unlimited builds, full tune values, presets, and advanced tools.</p>
 
         <div v-if="reason" class="sm-reason liquid-glass">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -42,6 +42,10 @@ defineEmits(['close'])
           <ul class="sm-features">
             <li class="sm-feature">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+              Unlimited Saves
+            </li>
+            <li class="sm-feature">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
               Full Tune Values
             </li>
             <li class="sm-feature">
@@ -50,11 +54,7 @@ defineEmits(['close'])
             </li>
             <li class="sm-feature">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-              Save Builds
-            </li>
-            <li class="sm-feature">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-              Favorites
+              All Presets
             </li>
             <li class="sm-feature">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>

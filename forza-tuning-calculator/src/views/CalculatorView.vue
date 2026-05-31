@@ -347,7 +347,17 @@ function shareTune() {
 const { user } = useAuth()
 
 const STORAGE_KEY = 'forza-tune-saved-builds-v1'
-const MAX_SAVES = 10
+const FREE_MAX_SAVES = 5
+const PRO_MAX_SAVES = 200
+const maxSaves = computed(() => isPro.value ? PRO_MAX_SAVES : FREE_MAX_SAVES)
+
+const cloudSavedBuildCount = computed(() =>
+  savedBuilds.value.filter(b => b.source === 'cloud').length
+)
+
+const hasReachedFreeSaveLimit = computed(() =>
+  !!user.value && !isPro.value && cloudSavedBuildCount.value >= FREE_MAX_SAVES
+)
 
 const savedBuilds = ref([])
 const saveStatus = ref('')
@@ -405,7 +415,7 @@ async function loadCloudBuilds() {
       .select('*')
       .eq('user_id', user.value.id)
       .order('created_at', { ascending: false })
-      .limit(MAX_SAVES)
+      .limit(maxSaves.value)
 
     if (fetchError) { console.error('Cloud load error:', fetchError.message); return }
 
@@ -420,7 +430,7 @@ async function loadCloudBuilds() {
     }
 
     savedBuilds.value.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    savedBuilds.value = savedBuilds.value.slice(0, MAX_SAVES)
+    savedBuilds.value = savedBuilds.value.slice(0, maxSaves.value)
     persistSaves()
   } catch (e) {
     console.error('Cloud load failed:', e)
@@ -458,6 +468,14 @@ function onPublished({ publishedTuneId, publishedSlug }) {
     }
     persistSaves()
   }
+}
+
+function handleSaveBuildClick() {
+  if (hasReachedFreeSaveLimit.value) {
+    openProModal(t('vehicle.freeSaveLimitMsg'))
+    return
+  }
+  saveCurrentBuild()
 }
 
 async function saveCurrentBuild() {
@@ -555,7 +573,7 @@ async function saveCurrentBuild() {
     console.log('SAVE BUILD SKIPPED CLOUD', { supabase: !!supabase, user: !!user.value })
   }
 
-  savedBuilds.value = [build, ...savedBuilds.value].slice(0, MAX_SAVES)
+  savedBuilds.value = [build, ...savedBuilds.value].slice(0, maxSaves.value)
   persistSaves()
   saveStatus.value = editingTuneId.value ? 'updated' : 'build'
   success(editingTuneId.value ? 'Build updated' : 'Build saved')
@@ -914,7 +932,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
                 {{ copiedShare ? 'Shared' : 'Share' }}
               </button>
             </div>
-            <button class="btn-primary" @click="isPro ? saveCurrentBuild() : openProModal('Save your tune builds to the cloud')">
+            <button class="btn-primary" @click="handleSaveBuildClick">
               {{ saveStatus === 'build' ? 'Saved' : saveStatus === 'updated' ? 'Updated' : editingTuneId ? 'Update Build' : 'Save Build' }}
             </button>
           </div>
