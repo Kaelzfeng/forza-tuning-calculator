@@ -2,18 +2,22 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const STORAGE_KEY = 'forza_tune_intro_seen'
-const MAX_INTRO_MS = 2500
+const HOLD_AFTER_ENDED_MS = 4000
+const PLAY_START_TIMEOUT_MS = 5000
 
 const visible = ref(false)
 const exiting = ref(false)
+const videoStarted = ref(false)
 
 let exitTimer = null
-let fallbackTimer = null
+let holdTimer = null
+let startTimeout = null
 
 function close() {
   if (exiting.value) return
   exiting.value = true
-  clearTimeout(fallbackTimer)
+  clearTimeout(holdTimer)
+  clearTimeout(startTimeout)
   exitTimer = setTimeout(() => {
     visible.value = false
   }, 400)
@@ -27,12 +31,18 @@ function onKeydown(e) {
   if (e.key === 'Escape') skip()
 }
 
+function onVideoPlaying() {
+  videoStarted.value = true
+  clearTimeout(startTimeout)
+}
+
 function onVideoEnded() {
-  close()
+  // Video reached the end — hold last frame for 4s, then close
+  holdTimer = setTimeout(close, HOLD_AFTER_ENDED_MS)
 }
 
 function onVideoError() {
-  // Video failed to load or play — close immediately
+  // Video failed — close immediately
   close()
 }
 
@@ -44,14 +54,18 @@ onMounted(() => {
 
   visible.value = true
   window.addEventListener('keydown', onKeydown)
-  // Fallback: always close after MAX_INTRO_MS regardless of video state
-  fallbackTimer = setTimeout(close, MAX_INTRO_MS)
+
+  // Safety: if video never starts playing within 5s, close
+  startTimeout = setTimeout(() => {
+    if (!videoStarted.value) close()
+  }, PLAY_START_TIMEOUT_MS)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
   clearTimeout(exitTimer)
-  clearTimeout(fallbackTimer)
+  clearTimeout(holdTimer)
+  clearTimeout(startTimeout)
 })
 </script>
 
@@ -70,9 +84,9 @@ onBeforeUnmount(() => {
         autoplay
         muted
         playsinline
+        @playing="onVideoPlaying"
         @ended="onVideoEnded"
         @error="onVideoError"
-        @stalled="close"
       />
 
       <button class="skip-btn" @click.stop="skip">
