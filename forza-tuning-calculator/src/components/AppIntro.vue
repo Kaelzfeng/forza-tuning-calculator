@@ -2,7 +2,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const STORAGE_KEY = 'forza_tune_intro_seen'
-const HOLD_AFTER_ENDED_MS = 4000
+const HOLD_AFTER_ENDED_MS = 2000
 const PLAY_START_TIMEOUT_MS = 5000
 
 const visible = ref(false)
