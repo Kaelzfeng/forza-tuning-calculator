@@ -31,6 +31,11 @@ const tunes = ref([])
 const tunesLoading = ref(false)
 const tunesError = ref('')
 const relatedVehicles = ref([])
+const relatedVehiclesLoading = ref(false)
+const relatedTunes = ref([])
+const relatedTunesLoading = ref(false)
+const popularTunes = ref([])
+const popularTunesLoading = ref(false)
 const loading = ref(true)
 const notFound = ref(false)
 const loadError = ref('')
@@ -115,14 +120,8 @@ async function fetchVehicle() {
         else { tunes.value = tData || [] }
         tunesLoading.value = false
 
-        // Related vehicles
-        const { data: rData } = await supabase
-          .from('vehicles')
-          .select('*')
-          .neq('id', vData.id)
-          .or(`class.eq.${vData.class || ''},manufacturer.eq.${vData.manufacturer || ''}`)
-          .limit(4)
-        relatedVehicles.value = rData || []
+        // Related content
+        fetchAllRelated()
 
         applySeo(vData)
         fetchComments(vData.id)
@@ -146,6 +145,142 @@ async function fetchVehicle() {
   // Both failed
   notFound.value = true
   loading.value = false
+}
+
+async function fetchSimilarVehicles() {
+  if (!supabase || !vehicle.value) return
+  relatedVehiclesLoading.value = true
+  try {
+    const v = vehicle.value
+    let result = []
+
+    if (v.manufacturer) {
+      const { data } = await supabase
+        .from('vehicles')
+        .select('*')
+        .eq('manufacturer', v.manufacturer)
+        .neq('id', v.id)
+        .order('year', { ascending: false })
+        .limit(6)
+      result = data || []
+    }
+
+    if (result.length < 6 && v.class) {
+      const skipIds = new Set([v.id, ...result.map(x => x.id)])
+      const { data } = await supabase
+        .from('vehicles')
+        .select('*')
+        .eq('class', v.class)
+        .order('year', { ascending: false })
+        .limit(10)
+      const extra = (data || []).filter(x => !skipIds.has(x.id))
+      result = [...result, ...extra].slice(0, 6)
+    }
+
+    relatedVehicles.value = result
+  } catch {
+    relatedVehicles.value = []
+  } finally {
+    relatedVehiclesLoading.value = false
+  }
+}
+
+async function fetchRelatedTunes() {
+  if (!supabase || !vehicle.value) return
+  relatedTunesLoading.value = true
+  try {
+    const v = vehicle.value
+    const existingIds = new Set(tunes.value.map(t => t.id))
+    let result = []
+
+    // 1. Same vehicle_id (exclude already shown Community Tunes)
+    if (result.length < 6) {
+      const { data } = await supabase
+        .from('tunes_public')
+        .select('*')
+        .eq('vehicle_id', v.id)
+        .order('created_at', { ascending: false })
+        .limit(6)
+      const fresh = (data || []).filter(t => !existingIds.has(t.id))
+      result = fresh.slice(0, 6)
+    }
+
+    // 2. Same manufacturer
+    if (result.length < 6 && v.manufacturer) {
+      const { data: mfrVehicles } = await supabase
+        .from('vehicles')
+        .select('id')
+        .eq('manufacturer', v.manufacturer)
+        .neq('id', v.id)
+        .limit(10)
+      const mfrIds = (mfrVehicles || []).map(x => x.id)
+      if (mfrIds.length > 0) {
+        const skipIds = new Set([...existingIds, ...result.map(t => t.id)])
+        const { data: mfrTunes } = await supabase
+          .from('tunes_public')
+          .select('*')
+          .in('vehicle_id', mfrIds)
+          .order('created_at', { ascending: false })
+          .limit(6)
+        const extra = (mfrTunes || []).filter(t => !skipIds.has(t.id))
+        result = [...result, ...extra].slice(0, 6)
+      }
+    }
+
+    // 3. Same class
+    if (result.length < 6 && v.class) {
+      const { data: clsVehicles } = await supabase
+        .from('vehicles')
+        .select('id')
+        .eq('class', v.class)
+        .neq('id', v.id)
+        .neq('manufacturer', v.manufacturer)
+        .limit(10)
+      const clsIds = (clsVehicles || []).map(x => x.id)
+      if (clsIds.length > 0) {
+        const skipIds = new Set([...existingIds, ...result.map(t => t.id)])
+        const { data: clsTunes } = await supabase
+          .from('tunes_public')
+          .select('*')
+          .in('vehicle_id', clsIds)
+          .order('created_at', { ascending: false })
+          .limit(6)
+        const extra = (clsTunes || []).filter(t => !skipIds.has(t.id))
+        result = [...result, ...extra].slice(0, 6)
+      }
+    }
+
+    relatedTunes.value = result
+  } catch {
+    relatedTunes.value = []
+  } finally {
+    relatedTunesLoading.value = false
+  }
+}
+
+async function fetchPopularTunes() {
+  if (!supabase) return
+  popularTunesLoading.value = true
+  try {
+    const { data } = await supabase
+      .from('tunes_public')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(6)
+    popularTunes.value = data || []
+  } catch {
+    popularTunes.value = []
+  } finally {
+    popularTunesLoading.value = false
+  }
+}
+
+async function fetchAllRelated() {
+  await Promise.all([
+    fetchSimilarVehicles(),
+    fetchRelatedTunes(),
+    fetchPopularTunes(),
+  ])
 }
 
 const favToggling = ref(false)
@@ -360,6 +495,17 @@ watch(slug, () => { fetchVehicle() })
         </div>
       </section>
 
+      <!-- ═══════════ Related Tunes ═══════════ -->
+      <section v-if="relatedTunes.length > 0" class="vd-section">
+        <h2 class="vd-section-title">Related Tunes</h2>
+        <div v-if="relatedTunesLoading" class="vd-empty glass-card-white">
+          <span class="vd-empty-text">Loading related tunes...</span>
+        </div>
+        <div v-else class="vd-tunes-grid">
+          <TuneCard v-for="t in relatedTunes" :key="t.id" :tune="t" />
+        </div>
+      </section>
+
       <!-- ═══════════ Comments ═══════════ -->
       <section v-if="vehicle.id" class="vd-section">
         <h2 class="vd-section-title">{{ t('vehicle.comments') }}</h2>
@@ -434,11 +580,25 @@ watch(slug, () => { fetchVehicle() })
         </div>
       </section>
 
-      <!-- ═══════════ Related Vehicles ═══════════ -->
+      <!-- ═══════════ Similar Vehicles ═══════════ -->
       <section v-if="relatedVehicles.length > 0" class="vd-section">
-        <h2 class="vd-section-title">Related Vehicles</h2>
-        <div class="vd-related-grid">
+        <h2 class="vd-section-title">Similar Vehicles</h2>
+        <div v-if="relatedVehiclesLoading" class="vd-empty glass-card-white">
+          <span class="vd-empty-text">Loading similar vehicles...</span>
+        </div>
+        <div v-else class="vd-related-grid">
           <VehicleCard v-for="rv in relatedVehicles" :key="rv.id" :vehicle="rv" />
+        </div>
+      </section>
+
+      <!-- ═══════════ Popular Community Tunes ═══════════ -->
+      <section v-if="popularTunes.length > 0" class="vd-section">
+        <h2 class="vd-section-title">Popular Community Tunes</h2>
+        <div v-if="popularTunesLoading" class="vd-empty glass-card-white">
+          <span class="vd-empty-text">Loading popular tunes...</span>
+        </div>
+        <div v-else class="vd-tunes-grid">
+          <TuneCard v-for="t in popularTunes" :key="t.id" :tune="t" />
         </div>
       </section>
 
@@ -587,7 +747,7 @@ watch(slug, () => { fetchVehicle() })
   border-radius: 16px;
   overflow: hidden;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.20);
+  background: #fff;
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.38);
@@ -683,7 +843,7 @@ watch(slug, () => { fetchVehicle() })
   font-size: 0.82rem;
   font-weight: 580;
   color: #4b5563;
-  background: rgba(255, 255, 255, 0.30);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.36);
 }
 
@@ -715,7 +875,7 @@ watch(slug, () => { fetchVehicle() })
 
 .vd-fav-save {
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.34);
+  background: #fff;
   border-color: rgba(255, 255, 255, 0.44);
   box-shadow:
     0 1px 4px rgba(0, 0, 0, 0.04),
@@ -723,7 +883,7 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vd-fav-save:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.46);
+  background: #fff;
   border-color: rgba(91, 122, 154, 0.38);
   color: #2d4a63;
   transform: translateY(-1px);
@@ -841,20 +1001,27 @@ watch(slug, () => { fetchVehicle() })
   color: #4b5563;
 }
 
+/* ── White card (non-glass) ── */
+.glass-card-white {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
 .vd-empty-cta {
   padding: 9px 20px;
   border-radius: 10px;
   font-size: 0.80rem;
   font-weight: 600;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.30);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.38);
   text-decoration: none;
   transition: all 0.15s ease;
 }
 
 .vd-empty-cta:hover {
-  background: rgba(255, 255, 255, 0.40);
+  background: #fff;
   color: #2d4a63;
 }
 

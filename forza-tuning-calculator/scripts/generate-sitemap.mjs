@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs'
 import { resolve } from 'path'
 
-const SITE_URL = (process.env.VITE_SITE_URL || 'https://forzatune.com').replace(/\/+$/, '')
+const SITE_URL = (process.env.VITE_SITE_URL || 'https://forzatuningcalculator.com').replace(/\/+$/, '')
 
 const routesPath = resolve('prerender-routes.json')
 if (!existsSync(routesPath)) {

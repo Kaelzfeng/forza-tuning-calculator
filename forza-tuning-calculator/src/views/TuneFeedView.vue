@@ -312,7 +312,7 @@ onMounted(() => {
   font-size: 0.82rem;
   font-weight: 600;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.25);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.38);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -320,7 +320,7 @@ onMounted(() => {
 }
 
 .feed-retry-btn:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: #fff;
   color: #2d4a63;
 }
 

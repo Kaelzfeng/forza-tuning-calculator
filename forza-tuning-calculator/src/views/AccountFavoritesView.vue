@@ -484,7 +484,7 @@ watch(user, (u) => {
   font-size: 0.8rem;
   font-weight: 600;
   color: #333333;
-  background: rgba(255, 255, 255, 0.22);
+  background: #fff;
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.36);
@@ -493,7 +493,7 @@ watch(user, (u) => {
 }
 
 .confirm-cancel:hover {
-  background: rgba(255, 255, 255, 0.34);
+  background: #fff;
   border-color: rgba(255, 255, 255, 0.48);
   color: #222222;
 }

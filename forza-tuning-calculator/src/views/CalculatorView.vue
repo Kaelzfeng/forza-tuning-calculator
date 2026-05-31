@@ -1236,7 +1236,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .mode-toggle-btn.active {
-  background: rgba(255, 255, 255, 0.45);
+  background: #fff;
   color: #2d4a63;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
@@ -1416,7 +1416,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   gap: 14px;
   padding: 16px 18px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.88);
+  background: #fff;
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.42);
@@ -1430,7 +1430,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .quick-card:hover {
-  background: rgba(255, 255, 255, 0.93);
+  background: #fff;
   border-color: rgba(255, 255, 255, 0.55);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.50),
@@ -1450,7 +1450,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   width: 44px;
   height: 44px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.36);
+  background: #fff;
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.50);
@@ -1699,7 +1699,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   text-align: left;
   font-family: inherit;
   border: 1px solid rgba(255, 255, 255, 0.38);
-  background: rgba(255, 255, 255, 0.90);
+  background: #fff;
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   box-shadow:
@@ -1709,7 +1709,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .preset-card:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.93);
+  background: #fff;
   border-color: rgba(255, 255, 255, 0.52);
   transform: translateY(-2px);
   box-shadow:
@@ -1743,7 +1743,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 
 .preset-locked:hover {
   transform: none !important;
-  background: rgba(255, 255, 255, 0.90) !important;
+  background: #fff !important;
 }
 
 .preset-lock-icon {
@@ -1785,7 +1785,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .preset-cancel:hover {
-  background: rgba(255, 255, 255, 0.93);
+  background: #fff;
   color: #222222;
 }
 
@@ -1795,7 +1795,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   z-index: 2;
   padding: 20px 22px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.90);
+  background: #fff;
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.36);
@@ -1934,7 +1934,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .step-group:hover {
-  background: rgba(255, 255, 255, 0.88);
+  background: #fff;
 }
 
 .step-number {
@@ -1942,7 +1942,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.45);
   display: flex;
   align-items: center;
@@ -2020,13 +2020,13 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   gap: 10px;
   padding: 12px 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.88);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.38);
   transition: background 0.15s ease;
 }
 
 .saved-item:hover {
-  background: rgba(255, 255, 255, 0.90);
+  background: #fff;
 }
 
 .saved-body {
@@ -2292,7 +2292,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   gap: 8px;
   padding: 16px 18px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.90);
+  background: #fff;
   backdrop-filter: blur(12px) saturate(155%);
   -webkit-backdrop-filter: blur(12px) saturate(155%);
   border: 1px solid rgba(255, 255, 255, 0.40);
@@ -2392,7 +2392,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .compare-card {
   padding: 16px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.90);
+  background: #fff;
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.40);
@@ -2407,7 +2407,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .compare-card:hover {
-  background: rgba(255, 255, 255, 0.93);
+  background: #fff;
   border-color: rgba(255, 255, 255, 0.44);
   transform: translateY(-2px);
 }

@@ -384,7 +384,7 @@ function modeStyle(mode) {
   color: #4a6b85;
   padding: 10px 20px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.30);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.36);
   cursor: pointer;
   font-family: inherit;
@@ -394,7 +394,7 @@ function modeStyle(mode) {
 
 .hero-secondary:hover {
   color: #2d4a63;
-  background: rgba(255, 255, 255, 0.42);
+  background: #fff;
   border-color: rgba(91, 122, 154, 0.32);
   transform: translateY(-1px);
 }
@@ -490,7 +490,7 @@ function modeStyle(mode) {
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.20);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.30);
 }
 
@@ -539,7 +539,7 @@ function modeStyle(mode) {
   color: #374151;
   padding: 2px 8px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.30);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.32);
 }
 
@@ -657,7 +657,7 @@ function modeStyle(mode) {
   font-size: 0.60rem;
   font-weight: 600;
   color: #374151;
-  background: rgba(255, 255, 255, 0.26);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.36);
 }
 

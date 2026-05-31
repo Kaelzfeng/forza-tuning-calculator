@@ -163,12 +163,25 @@ onMounted(() => {
           :to="`/tunes/${tune.slug || tune.id}`"
           class="tune-card liquid-card"
         >
+          <!-- Top row: share code + date -->
+          <div class="tc-top-row">
+            <span v-if="tune.share_code" class="tc-share-code-pill">{{ tune.share_code }}</span>
+            <span class="tc-date">{{ formatDate(tune.created_at) }}</span>
+          </div>
           <h3 class="tc-title">{{ tune.title || 'Untitled' }}</h3>
           <span v-if="tune.vehicle_name" class="tc-vehicle">{{ tune.vehicle_name }}</span>
-          <div v-if="buildMetaLabel(tune).length > 0" class="tc-tags">
-            <span v-for="tag in buildMetaLabel(tune)" :key="tag" class="tc-tag">{{ tag }}</span>
+          <!-- Game mode + meta tags -->
+          <div class="tc-meta-row">
+            <span v-if="tune.game_mode" class="tc-game-mode-tag">{{ tune.game_mode }}</span>
+            <span v-if="tune.drivetrain" class="tc-meta-tag">{{ tune.drivetrain }}</span>
+            <span v-if="tune.class_tier || tune.pi_class" class="tc-meta-tag">{{ tune.class_tier || tune.pi_class }}</span>
           </div>
-          <span class="tc-date">{{ formatDate(tune.created_at) }}</span>
+          <!-- Description excerpt -->
+          <p v-if="tune.description" class="tc-desc">{{ tune.description.slice(0, 120) }}{{ tune.description.length > 120 ? '...' : '' }}</p>
+          <!-- User tags -->
+          <div v-if="tune.tags" class="tc-tags-row">
+            <span v-for="tag in tune.tags.split(',').slice(0, 5)" :key="tag" class="tc-user-tag">{{ tag.trim() }}</span>
+          </div>
         </router-link>
       </div>
 
@@ -223,7 +236,7 @@ onMounted(() => {
   gap: 10px;
   padding: 10px 16px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.18);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
@@ -302,10 +315,79 @@ onMounted(() => {
   border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
+.tc-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tc-share-code-pill {
+  font-size: 0.66rem;
+  font-weight: 640;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: #3d648c;
+  background: rgba(74, 107, 133, 0.07);
+  border: 1px solid rgba(91, 122, 154, 0.20);
+  padding: 2px 10px;
+  border-radius: 6px;
+}
+
 .tc-date {
   font-size: 0.68rem;
   font-weight: 500;
-  color: #333333;
+  color: #6b7280;
+}
+
+.tc-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tc-game-mode-tag {
+  font-size: 0.62rem;
+  font-weight: 640;
+  color: #374151;
+  padding: 2px 9px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.tc-meta-tag {
+  font-size: 0.60rem;
+  font-weight: 580;
+  color: #4B5563;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.tc-desc {
+  font-size: 0.74rem;
+  line-height: 1.50;
+  color: #4B5563;
+  font-weight: 500;
+  margin: 0;
+}
+
+.tc-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tc-user-tag {
+  font-size: 0.60rem;
+  font-weight: 580;
+  color: #5b7a9a;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(91, 122, 154, 0.06);
+  border: 1px solid rgba(91, 122, 154, 0.12);
 }
 
 /* ── Skeleton ── */

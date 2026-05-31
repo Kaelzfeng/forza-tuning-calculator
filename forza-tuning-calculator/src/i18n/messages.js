@@ -97,6 +97,7 @@ export default { en: {
     noTunes:'No Tunes Yet', noTunesDesc:'Be the first to publish a tune! Create one in the Calculator and share it with the community.',
     openCalculator:'Open Calculator', failedToLoad:'Failed to Load', retry:'Retry', loadMore:'Load More',
     loading:'Loading...', reachedEnd:"You've reached the end", untitled:'Untitled Tune', publishTune:'Publish Tune', deleteTune:'Delete Tune', deleteConfirm:'Delete this tune? This action cannot be undone.', deleteSuccess:'Tune deleted', deleteFailed:'Failed to delete tune', confirmDelete:'Delete', loginRequired:'Login required',
+    publishTitle:'Publish Community Tune', shareCode:'Share Code', shareCodePlaceholder:'e.g. 123 456 789', gameMode:'Game Mode', gameModeRoad:'Road', gameModeDrift:'Drift', gameModeDirt:'Dirt', gameModeDrag:'Drag', classLabel:'Class', tagLabel:'Tags', tagPlaceholder:'Add up to 5 tags...', tagHint:'Press Enter to add', descMinLength:'Description must be at least 20 characters.', publishSuccess:'Published!', viewTune:'View Tune',
   },
   vehicles: {
     title:'Vehicles', subtitle:'Browse cars and find community tunes for every build', search:'Search vehicles...',
@@ -208,6 +209,7 @@ zh: {
     noTunes:'暂无调教分享', noTunesDesc:'还没有玩家发布调教方案。你可以先用调教计算器生成一套方案。',
     openCalculator:'前往调教计算器', failedToLoad:'加载失败', retry:'重试', loadMore:'加载更多',
     loading:'加载中...', reachedEnd:'已显示全部内容', untitled:'未命名调教', publishTune:'发布调教', deleteTune:'删除调教', deleteConfirm:'确定删除这条调教吗？此操作无法撤销。', deleteSuccess:'调教已删除', deleteFailed:'删除失败', confirmDelete:'删除', loginRequired:'请先登录',
+    publishTitle:'发布调教方案', shareCode:'调教代码', shareCodePlaceholder:'例如：123 456 789', gameMode:'游戏模式', gameModeRoad:'公路', gameModeDrift:'漂移', gameModeDirt:'拉力', gameModeDrag:'直线加速', classLabel:'等级', tagLabel:'标签', tagPlaceholder:'最多添加 5 个标签...', tagHint:'按回车添加', descMinLength:'描述至少需要 20 个字符。', publishSuccess:'发布成功！', viewTune:'查看调教',
   },
   vehicles: {
     title:'车型库', subtitle:'浏览全部车型，为每辆车找到最适合的调教方案', search:'搜索车型...',

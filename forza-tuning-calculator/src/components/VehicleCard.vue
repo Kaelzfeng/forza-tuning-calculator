@@ -91,7 +91,7 @@ const classColors = {
   transition: all 0.2s ease;
   position: relative;
   /* Solid background for readability on bright BG image */
-  background: rgba(255, 255, 255, 0.92);
+  background: #fff;
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
   border: 1px solid rgba(180, 190, 200, 0.40);

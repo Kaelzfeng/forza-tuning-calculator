@@ -156,7 +156,7 @@ function modeStyle(mode) {
   font-size: 0.62rem;
   font-weight: 600;
   color: #374151;
-  background: rgba(255, 255, 255, 0.28);
+  background: #fff;
   backdrop-filter: blur(8px) saturate(150%);
   -webkit-backdrop-filter: blur(8px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.42);

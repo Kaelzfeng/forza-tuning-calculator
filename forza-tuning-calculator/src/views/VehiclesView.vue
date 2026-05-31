@@ -54,7 +54,7 @@ async function fetchVehicles() {
       if (classFilter.value) query = query.eq('class', classFilter.value)
       if (search.value.trim()) {
         const term = `%${search.value.trim()}%`
-        query = query.or(`name.ilike.${term},manufacturer.ilike.${term}`)
+        query = query.or(`name.ilike.${term},manufacturer.ilike.${term},country.ilike.${term},class.ilike.${term},drivetrain.ilike.${term},year::text.ilike.${term}`)
       }
 
       const { data, error: fetchError } = await query
@@ -83,9 +83,15 @@ async function fetchVehicles() {
             const q = search.value.toLowerCase()
             const name = (v.name || '').toLowerCase()
             const mfr = (v.manufacturer || '').toLowerCase()
-            if (!name.includes(q) && !mfr.includes(q)) return false
+            const country = (v.country || '').toLowerCase()
+            const cls = (v.class || '').toLowerCase()
+            const dt = (v.drivetrain || '').toLowerCase()
+            const year = v.year != null ? String(v.year) : ''
+            if (!name.includes(q) && !mfr.includes(q) && !country.includes(q) && !cls.includes(q) && !dt.includes(q) && !year.includes(q)) return false
           }
           if (manufacturerFilter.value && v.manufacturer !== manufacturerFilter.value) return false
+          if (drivetrainFilter.value && v.drivetrain !== drivetrainFilter.value) return false
+          if (classFilter.value && v.class !== classFilter.value) return false
           return true
         })
         .map(v => ({
@@ -95,6 +101,7 @@ async function fetchVehicles() {
           year: v.year || null,
           drivetrain: v.drivetrain || null,
           class: v.class || null,
+          country: v.country || null,
           horsepower: v.horsepower || null,
           weight: v.weight || null,
           image_url: v.image_url || v.thumbnail_url || null,
@@ -379,7 +386,7 @@ onBeforeUnmount(() => {})
   font-size: 0.75rem;
   font-weight: 600;
   color: #4b5563;
-  background: rgba(255, 255, 255, 0.30);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.38);
   cursor: pointer;
   transition: all 0.15s ease;
@@ -388,7 +395,7 @@ onBeforeUnmount(() => {})
 }
 
 .vp-clear-btn:hover {
-  background: rgba(255, 255, 255, 0.40);
+  background: #fff;
   color: #111827;
 }
 
@@ -479,7 +486,7 @@ onBeforeUnmount(() => {})
   font-size: 0.82rem;
   font-weight: 600;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.30);
+  background: #fff;
   border: 1px solid rgba(255, 255, 255, 0.40);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -488,7 +495,7 @@ onBeforeUnmount(() => {})
 }
 
 .vp-retry-btn:hover {
-  background: rgba(255, 255, 255, 0.40);
+  background: #fff;
   color: #2d4a63;
 }
 
