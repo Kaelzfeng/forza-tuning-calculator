@@ -1416,7 +1416,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   gap: 14px;
   padding: 16px 18px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.42);
@@ -1430,7 +1430,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .quick-card:hover {
-  background: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.93);
   border-color: rgba(255, 255, 255, 0.55);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.50),
@@ -1699,7 +1699,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   text-align: left;
   font-family: inherit;
   border: 1px solid rgba(255, 255, 255, 0.38);
-  background: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.90);
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   box-shadow:
@@ -1709,7 +1709,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .preset-card:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.93);
   border-color: rgba(255, 255, 255, 0.52);
   transform: translateY(-2px);
   box-shadow:
@@ -1743,7 +1743,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 
 .preset-locked:hover {
   transform: none !important;
-  background: rgba(255, 255, 255, 0.18) !important;
+  background: rgba(255, 255, 255, 0.90) !important;
 }
 
 .preset-lock-icon {
@@ -1785,7 +1785,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .preset-cancel:hover {
-  background: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.93);
   color: #222222;
 }
 
@@ -1795,7 +1795,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   z-index: 2;
   padding: 20px 22px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.90);
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.36);
@@ -1934,7 +1934,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .step-group:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .step-number {
@@ -2020,13 +2020,13 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   gap: 10px;
   padding: 12px 14px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.38);
   transition: background 0.15s ease;
 }
 
 .saved-item:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.90);
 }
 
 .saved-body {
@@ -2292,10 +2292,10 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
   gap: 8px;
   padding: 16px 18px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.90);
   backdrop-filter: blur(12px) saturate(155%);
   -webkit-backdrop-filter: blur(12px) saturate(155%);
-  border: 1px solid rgba(255, 255, 255, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.40);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.38),
     0 2px 8px rgba(0, 0, 0, 0.03);
@@ -2392,10 +2392,10 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 .compare-card {
   padding: 16px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.90);
   backdrop-filter: blur(12px) saturate(150%);
   -webkit-backdrop-filter: blur(12px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.40);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     0 2px 8px rgba(0, 0, 0, 0.03);
@@ -2407,7 +2407,7 @@ const drivingStyleOpts = ['Stable', 'Balanced', 'Aggressive', 'Drifty', 'Beginne
 }
 
 .compare-card:hover {
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.93);
   border-color: rgba(255, 255, 255, 0.44);
   transform: translateY(-2px);
 }

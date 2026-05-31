@@ -21,25 +21,18 @@ const drivetrainFilter = ref(route.query.drivetrain || '')
 const classFilter = ref(route.query.class || '')
 
 // ── Pagination ──
-function getPageSize() {
-  return window.innerWidth <= 768 ? 12 : 24
-}
-const pageSize = ref(getPageSize())
-const visibleCount = ref(pageSize.value)
+const PAGE_SIZE = 50
+const visibleCount = ref(PAGE_SIZE)
 
 const visibleVehicles = computed(() => vehicles.value.slice(0, visibleCount.value))
 const hasMoreVehicles = computed(() => visibleCount.value < vehicles.value.length)
 
 function loadMore() {
-  visibleCount.value += pageSize.value
+  visibleCount.value += PAGE_SIZE
 }
 
 function resetPagination() {
-  visibleCount.value = pageSize.value
-}
-
-function onResize() {
-  pageSize.value = getPageSize()
+  visibleCount.value = PAGE_SIZE
 }
 
 const manufacturers = computed(() => {
@@ -154,7 +147,6 @@ watch([manufacturerFilter, drivetrainFilter, classFilter, search], () => {
 })
 
 onMounted(() => {
-  window.addEventListener('resize', onResize)
   useSeoMeta({
     title: 'Vehicle Tuning Database — Forza Tuning Calculator',
     description: 'Browse the complete Forza vehicle tuning database. Find community tunes for every car — Road, Drift, Drag, Dirt. Filter by manufacturer, drivetrain, and class.',
@@ -164,9 +156,7 @@ onMounted(() => {
   fetchVehicles()
 })
 
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', onResize)
-})
+onBeforeUnmount(() => {})
 </script>
 
 <template>
@@ -225,7 +215,7 @@ onBeforeUnmount(() => {
 
     <!-- Loading -->
     <div v-if="loading" class="vp-grid">
-      <div v-for="n in pageSize" :key="n" class="vp-skeleton liquid-panel">
+      <div v-for="n in PAGE_SIZE" :key="n" class="vp-skeleton liquid-panel">
         <div class="sk-thumb"></div>
         <div class="sk-lines">
           <div class="sk-row sk-short"></div>

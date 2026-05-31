@@ -89,10 +89,10 @@ body::after {
   pointer-events: none;
 
   background:
+    /* readability overlay — push background image back */
+    rgba(255, 255, 255, 0.70),
     /* vignette — darker edges for focal depth */
-    radial-gradient(ellipse 62% 58% at 50% 40%, transparent 42%, rgba(14, 18, 32, 0.18) 100%),
-    /* hero area — brighter top-center focal glow */
-    radial-gradient(ellipse 46% 36% at 50% 20%, rgba(255, 255, 255, 0.06), transparent 65%);
+    radial-gradient(ellipse 62% 58% at 50% 40%, transparent 42%, rgba(14, 18, 32, 0.10) 100%);
 }
 
 #app {
@@ -134,13 +134,13 @@ textarea {
   font-size: 0.88rem;
   font-family: inherit;
   color: #222222;
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(10px) saturate(140%);
   -webkit-backdrop-filter: blur(10px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.34);
+  border: 1px solid rgba(180, 190, 200, 0.40);
   box-shadow:
-    0 1px 4px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.44);
+    0 1px 4px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.52);
   outline: none;
   transition: border-color var(--motion-fast), box-shadow var(--motion-fast), background var(--motion-fast);
   box-sizing: border-box;
@@ -154,8 +154,8 @@ input[type="url"]:hover,
 input[type="search"]:hover,
 select:hover,
 textarea:hover {
-  background: rgba(255, 255, 255, 0.32);
-  border-color: rgba(150, 170, 195, 0.45);
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(140, 155, 175, 0.52);
 }
 
 input[type="text"]:focus,
@@ -166,12 +166,12 @@ input[type="url"]:focus,
 input[type="search"]:focus,
 select:focus,
 textarea:focus {
-  border-color: rgba(91, 122, 154, 0.48);
+  border-color: rgba(91, 122, 154, 0.55);
   box-shadow:
-    0 0 0 3px rgba(91, 122, 154, 0.08),
-    0 1px 4px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.48);
-  background: rgba(255, 255, 255, 0.38);
+    0 0 0 3px rgba(91, 122, 154, 0.10),
+    0 1px 4px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58);
+  background: rgba(255, 255, 255, 0.96);
 }
 
 textarea {

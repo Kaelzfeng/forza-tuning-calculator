@@ -90,6 +90,12 @@ const classColors = {
   color: inherit;
   transition: all 0.2s ease;
   position: relative;
+  /* Solid background for readability on bright BG image */
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid rgba(180, 190, 200, 0.40);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.55);
 }
 
 .vc-fav-btn {
@@ -174,7 +180,7 @@ const classColors = {
 .vc-name {
   font-size: 0.88rem;
   font-weight: 680;
-  color: #111111;
+  color: #111827;
   margin: 0;
   line-height: 1.2;
 }
@@ -188,34 +194,34 @@ const classColors = {
 .vc-tag {
   padding: 2px 8px;
   border-radius: 8px;
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   font-weight: 600;
-  color: #222222;
-  background: rgba(255, 255, 255, 0.26);
+  color: #1f2937;
+  background: rgba(255, 255, 255, 0.34);
   backdrop-filter: blur(6px) saturate(140%);
   -webkit-backdrop-filter: blur(6px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.40);
 }
 
 .vc-stats {
   font-size: 0.68rem;
   font-weight: 520;
-  color: #333333;
+  color: #374151;
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.vc-dot { color: #b0b8c0; }
+.vc-dot { color: #9ca3af; }
 
 .vc-tune-count {
   font-size: 0.65rem;
   font-weight: 550;
-  color: #5b7a9a;
+  color: #4a6b85;
 }
 
 .vc-no-tunes {
-  color: #333333;
+  color: #4b5563;
 }
 
 @media (max-width: 640px) {
