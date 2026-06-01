@@ -482,8 +482,8 @@ async function handlePublish() {
 }
 
 .pd-radio input:checked + .pd-radio-label {
-  background: #fff;
-  color: #111827;
+  background: rgba(255, 255, 255, 0.85);
+  color: #000000;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 

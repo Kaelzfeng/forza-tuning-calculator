@@ -303,14 +303,14 @@ onBeforeUnmount(() => {})
 .vp-title {
   font-size: 1.6rem;
   font-weight: 720;
-  color: #111827;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.02em;
 }
 
 .vp-subtitle {
   font-size: 0.95rem;
-  color: #374151;
+  color: #111111;
   font-weight: 500;
   margin: 0;
   line-height: 1.5;
@@ -353,13 +353,13 @@ onBeforeUnmount(() => {})
   border: none;
   background: transparent;
   font-size: 0.85rem;
-  color: #111827;
+  color: #000000;
   font-family: inherit;
   outline: none;
 }
 
 .vp-search-input::placeholder {
-  color: #6b7280;
+  color: #333333;
 }
 
 .vp-filter-select {
@@ -367,7 +367,7 @@ onBeforeUnmount(() => {})
   min-height: 40px;
   border-radius: 10px;
   font-size: 0.78rem;
-  color: #111827;
+  color: #000000;
   font-family: inherit;
   font-weight: 550;
   appearance: none;
@@ -385,9 +385,11 @@ onBeforeUnmount(() => {})
   border-radius: 10px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #4b5563;
-  background: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.38);
+  color: #000000;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.50);
   cursor: pointer;
   transition: all 0.15s ease;
   font-family: inherit;
@@ -395,8 +397,8 @@ onBeforeUnmount(() => {})
 }
 
 .vp-clear-btn:hover {
-  background: #fff;
-  color: #111827;
+  background: rgba(255, 255, 255, 0.84);
+  color: #000000;
 }
 
 /* ── Grid ── */
@@ -468,13 +470,13 @@ onBeforeUnmount(() => {})
 .vp-state-title {
   font-size: 1.05rem;
   font-weight: 680;
-  color: #111827;
+  color: #000000;
   margin: 0;
 }
 
 .vp-state-desc {
   font-size: 0.85rem;
-  color: #374151;
+  color: #111111;
   font-weight: 500;
   margin: 0;
   line-height: 1.5;
@@ -486,8 +488,10 @@ onBeforeUnmount(() => {})
   font-size: 0.82rem;
   font-weight: 600;
   color: #4a6b85;
-  background: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.40);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.50);
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
@@ -495,7 +499,7 @@ onBeforeUnmount(() => {})
 }
 
 .vp-retry-btn:hover {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.85);
   color: #2d4a63;
 }
 

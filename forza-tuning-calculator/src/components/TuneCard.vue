@@ -128,7 +128,7 @@ function modeStyle(mode) {
 .tc-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #111111;
+  color: #000000;
   margin: 0;
   line-height: 1.25;
   letter-spacing: -0.01em;
@@ -155,18 +155,18 @@ function modeStyle(mode) {
   border-radius: 10px;
   font-size: 0.62rem;
   font-weight: 600;
-  color: #374151;
-  background: #fff;
+  color: #111111;
+  background: rgba(255, 255, 255, 0.60);
   backdrop-filter: blur(8px) saturate(150%);
   -webkit-backdrop-filter: blur(8px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.52);
 }
 
 /* ── Notes ── */
 .tc-notes {
   font-size: 0.78rem;
   line-height: 1.55;
-  color: #4b5563;
+  color: #222222;
   font-weight: 500;
   margin: 0;
 }

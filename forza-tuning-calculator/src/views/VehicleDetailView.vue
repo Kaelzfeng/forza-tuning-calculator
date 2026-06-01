@@ -747,7 +747,7 @@ watch(slug, () => { fetchVehicle() })
   border-radius: 16px;
   overflow: hidden;
   flex-shrink: 0;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.38);
@@ -843,7 +843,7 @@ watch(slug, () => { fetchVehicle() })
   font-size: 0.82rem;
   font-weight: 580;
   color: #4b5563;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.36);
 }
 
@@ -875,7 +875,7 @@ watch(slug, () => { fetchVehicle() })
 
 .vd-fav-save {
   color: #4a6b85;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.78);
   border-color: rgba(255, 255, 255, 0.44);
   box-shadow:
     0 1px 4px rgba(0, 0, 0, 0.04),
@@ -883,7 +883,7 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vd-fav-save:hover:not(:disabled) {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.78);
   border-color: rgba(91, 122, 154, 0.38);
   color: #2d4a63;
   transform: translateY(-1px);
@@ -1003,7 +1003,7 @@ watch(slug, () => { fetchVehicle() })
 
 /* ── White card (non-glass) ── */
 .glass-card-white {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.78);
   border: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
@@ -1014,14 +1014,14 @@ watch(slug, () => { fetchVehicle() })
   font-size: 0.80rem;
   font-weight: 600;
   color: #4a6b85;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.38);
   text-decoration: none;
   transition: all 0.15s ease;
 }
 
 .vd-empty-cta:hover {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.78);
   color: #2d4a63;
 }
 

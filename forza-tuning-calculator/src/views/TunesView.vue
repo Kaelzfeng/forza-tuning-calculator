@@ -217,14 +217,14 @@ onMounted(() => {
 .tunes-title {
   font-size: 1.5rem;
   font-weight: 720;
-  color: #111111;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.02em;
 }
 
 .tunes-subtitle {
   font-size: 0.9rem;
-  color: #222222;
+  color: #111111;
   font-weight: 500;
   margin: 0;
 }
@@ -236,12 +236,14 @@ onMounted(() => {
   gap: 10px;
   padding: 10px 16px;
   border-radius: 16px;
-  background: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px) saturate(145%);
+  -webkit-backdrop-filter: blur(12px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.50);
 }
 
 .tunes-search-icon {
-  color: #333333;
+  color: #222222;
   flex-shrink: 0;
 }
 
@@ -250,7 +252,7 @@ onMounted(() => {
   border: none;
   background: transparent;
   font-size: 0.85rem;
-  color: #222222;
+  color: #000000;
   font-family: inherit;
   outline: none;
   padding: 0;
@@ -288,7 +290,7 @@ onMounted(() => {
 .tc-title {
   font-size: 0.9rem;
   font-weight: 680;
-  color: #111111;
+  color: #000000;
   margin: 0;
   line-height: 1.25;
 }
@@ -435,13 +437,13 @@ onMounted(() => {
 .tunes-state-title {
   font-size: 1.1rem;
   font-weight: 680;
-  color: #111111;
+  color: #000000;
   margin: 0;
 }
 
 .tunes-state-desc {
   font-size: 0.85rem;
-  color: #222222;
+  color: #111111;
   font-weight: 500;
   margin: 0;
   line-height: 1.55;

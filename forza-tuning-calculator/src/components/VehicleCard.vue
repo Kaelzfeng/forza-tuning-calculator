@@ -90,11 +90,11 @@ const classColors = {
   color: inherit;
   transition: all 0.2s ease;
   position: relative;
-  /* Solid background for readability on bright BG image */
-  background: #fff;
+  /* Glass background for frosted effect with readability */
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
-  border: 1px solid rgba(180, 190, 200, 0.40);
+  border: 1px solid rgba(255, 255, 255, 0.58);
   box-shadow: 0 2px 10px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.55);
 }
 
@@ -180,7 +180,7 @@ const classColors = {
 .vc-name {
   font-size: 0.88rem;
   font-weight: 680;
-  color: #111827;
+  color: #000000;
   margin: 0;
   line-height: 1.2;
 }
@@ -196,17 +196,17 @@ const classColors = {
   border-radius: 8px;
   font-size: 0.62rem;
   font-weight: 600;
-  color: #1f2937;
-  background: rgba(255, 255, 255, 0.34);
+  color: #111111;
+  background: rgba(255, 255, 255, 0.52);
   backdrop-filter: blur(6px) saturate(140%);
   -webkit-backdrop-filter: blur(6px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.40);
+  border: 1px solid rgba(255, 255, 255, 0.48);
 }
 
 .vc-stats {
   font-size: 0.68rem;
   font-weight: 520;
-  color: #374151;
+  color: #111111;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -217,11 +217,11 @@ const classColors = {
 .vc-tune-count {
   font-size: 0.65rem;
   font-weight: 550;
-  color: #4a6b85;
+  color: #222222;
 }
 
 .vc-no-tunes {
-  color: #4b5563;
+  color: #222222;
 }
 
 @media (max-width: 640px) {

@@ -330,7 +330,7 @@ function modeStyle(mode) {
 .hero-title {
   font-size: clamp(2.4rem, 6vw, 3.6rem);
   font-weight: 780;
-  color: #111827;
+  color: #000000;
   line-height: 1.08;
   letter-spacing: -0.03em;
   margin: 0;
@@ -341,7 +341,7 @@ function modeStyle(mode) {
 .hero-subtitle {
   font-size: 1.05rem;
   font-weight: 650;
-  color: #1f2937;
+  color: #000000;
   margin: 0;
   position: relative;
   z-index: 2;
@@ -351,7 +351,7 @@ function modeStyle(mode) {
 .hero-desc {
   font-size: 0.90rem;
   line-height: 1.65;
-  color: #4b5563;
+  color: #111111;
   max-width: 460px;
   margin: 0;
   position: relative;
@@ -381,21 +381,23 @@ function modeStyle(mode) {
   gap: 7px;
   font-size: 0.84rem;
   font-weight: 620;
-  color: #4a6b85;
+  color: #2d4a63;
   padding: 10px 20px;
   border-radius: 12px;
-  background: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.36);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px) saturate(145%);
+  -webkit-backdrop-filter: blur(14px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.45);
 }
 
 .hero-secondary:hover {
   color: #2d4a63;
-  background: #fff;
-  border-color: rgba(91, 122, 154, 0.32);
+  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(91, 122, 154, 0.36);
   transform: translateY(-1px);
 }
 
@@ -423,7 +425,7 @@ function modeStyle(mode) {
 .trust-value {
   font-size: 1.3rem;
   font-weight: 720;
-  color: #111827;
+  color: #000000;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -437,7 +439,7 @@ function modeStyle(mode) {
 .trust-label {
   font-size: 0.66rem;
   font-weight: 620;
-  color: #6b859e;
+  color: #4a6b85;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -454,7 +456,7 @@ function modeStyle(mode) {
 .section-title {
   font-size: 1.05rem;
   font-weight: 680;
-  color: #111827;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -490,8 +492,8 @@ function modeStyle(mode) {
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
-  background: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.30);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 .pop-card-img img {
@@ -519,7 +521,7 @@ function modeStyle(mode) {
 .pop-name {
   font-size: 0.86rem;
   font-weight: 680;
-  color: #111827;
+  color: #000000;
   margin: 0;
   line-height: 1.2;
   white-space: nowrap;
@@ -539,8 +541,8 @@ function modeStyle(mode) {
   color: #374151;
   padding: 2px 8px;
   border-radius: 6px;
-  background: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.60);
+  border: 1px solid rgba(255, 255, 255, 0.48);
 }
 
 .pop-class {
@@ -558,7 +560,7 @@ function modeStyle(mode) {
 .pop-hp-value {
   font-size: 1.25rem;
   font-weight: 720;
-  color: #111827;
+  color: #000000;
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
@@ -617,7 +619,7 @@ function modeStyle(mode) {
 .tc-title {
   font-size: 0.92rem;
   font-weight: 680;
-  color: #111111;
+  color: #000000;
   margin: 0;
   line-height: 1.2;
 }
@@ -656,9 +658,9 @@ function modeStyle(mode) {
   border-radius: 8px;
   font-size: 0.60rem;
   font-weight: 600;
-  color: #374151;
-  background: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.36);
+  color: #111111;
+  background: rgba(255, 255, 255, 0.60);
+  border: 1px solid rgba(255, 255, 255, 0.48);
 }
 
 /* ═══════════ Bottom CTA ═══════════ */
@@ -678,7 +680,7 @@ function modeStyle(mode) {
 .bottom-title {
   font-size: 1.35rem;
   font-weight: 720;
-  color: #111827;
+  color: #000000;
   margin: 0;
   line-height: 1.2;
   position: relative;
@@ -687,7 +689,7 @@ function modeStyle(mode) {
 
 .bottom-desc {
   font-size: 0.92rem;
-  color: #4b5563;
+  color: #111111;
   margin: 0;
   font-weight: 500;
   position: relative;
