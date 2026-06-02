@@ -16,6 +16,14 @@ const routes = [
   { path: '/account/favorites', name: 'account-favorites', component: () => import('../views/AccountFavoritesView.vue') },
   { path: '/account/tunes', name: 'account-tunes', component: () => import('../views/MyTunesView.vue') },
   { path: '/account/tunes/:id/edit', name: 'tune-edit', component: () => import('../views/TuneEditView.vue') },
+  // SEO Ranking Pages
+  { path: '/best-awd-cars', name: 'best-awd', component: () => import('../views/SeoRankingView.vue'), meta: { ranking: 'awd' } },
+  { path: '/best-drift-cars', name: 'best-drift', component: () => import('../views/SeoRankingView.vue'), meta: { ranking: 'drift' } },
+  { path: '/best-beginner-cars', name: 'best-beginner', component: () => import('../views/SeoRankingView.vue'), meta: { ranking: 'beginner' } },
+  { path: '/best-s1-cars', name: 'best-s1', component: () => import('../views/SeoRankingView.vue'), meta: { ranking: 's1' } },
+  // Guide Center
+  { path: '/guides', name: 'guides', component: () => import('../views/GuidesView.vue') },
+  { path: '/guides/:slug', name: 'guide-detail', component: () => import('../views/GuideDetailView.vue') },
 ]
 
 const router = createRouter({

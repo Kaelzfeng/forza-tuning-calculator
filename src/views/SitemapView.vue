@@ -31,6 +31,17 @@ async function generate() {
     urlEntry(`${BASE_URL}/calculator`, today, 'monthly', '0.8'),
     urlEntry(`${BASE_URL}/tunes`, today, 'daily', '0.9'),
     urlEntry(`${BASE_URL}/vehicles`, today, 'daily', '0.9'),
+    urlEntry(`${BASE_URL}/best-awd-cars`, today, 'weekly', '0.7'),
+    urlEntry(`${BASE_URL}/best-drift-cars`, today, 'weekly', '0.7'),
+    urlEntry(`${BASE_URL}/best-beginner-cars`, today, 'weekly', '0.7'),
+    urlEntry(`${BASE_URL}/best-s1-cars`, today, 'weekly', '0.7'),
+    urlEntry(`${BASE_URL}/guides`, today, 'weekly', '0.8'),
+    urlEntry(`${BASE_URL}/guides/how-to-tune-awd`, today, 'monthly', '0.6'),
+    urlEntry(`${BASE_URL}/guides/how-to-tune-rwd`, today, 'monthly', '0.6'),
+    urlEntry(`${BASE_URL}/guides/how-to-fix-understeer`, today, 'monthly', '0.6'),
+    urlEntry(`${BASE_URL}/guides/how-to-fix-oversteer`, today, 'monthly', '0.6'),
+    urlEntry(`${BASE_URL}/guides/road-tuning-guide`, today, 'monthly', '0.6'),
+    urlEntry(`${BASE_URL}/guides/drift-tuning-guide`, today, 'monthly', '0.6'),
   ]
 
   let tuneUrls = ''

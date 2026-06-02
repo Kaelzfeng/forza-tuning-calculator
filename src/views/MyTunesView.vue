@@ -590,19 +590,19 @@ watch(user, (u) => {
   border-radius: 10px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #333333;
-  background: rgba(255, 255, 255, 0.22);
+  color: #222222;
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.36);
+  border: 1px solid rgba(255, 255, 255, 0.50);
   cursor: pointer;
   font-family: inherit;
 }
 
 .confirm-cancel:hover {
-  background: rgba(255, 255, 255, 0.34);
-  border-color: rgba(255, 255, 255, 0.48);
-  color: #222222;
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(255, 255, 255, 0.58);
+  color: #111111;
 }
 
 @media (max-width: 640px) {

@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { supabase } from '../lib/supabase.js'
 import VehicleCard from '../components/VehicleCard.vue'
 import TuneCard from '../components/TuneCard.vue'
-import { useSeoMeta, makeVehicleSchema, makeBreadcrumbSchema } from '../composables/useSeoMeta.js'
+import { useSeoMeta, makeVehicleSchema, makeBreadcrumbSchema, makeProductSchema } from '../composables/useSeoMeta.js'
 import { generateSlug } from '../utils/slug.js'
 import { useAuth } from '../composables/useAuth.js'
 import { useProAccess } from '../composables/useProAccess.js'
@@ -31,6 +31,11 @@ const tunes = ref([])
 const tunesLoading = ref(false)
 const tunesError = ref('')
 const relatedVehicles = ref([])
+const relatedVehiclesLoading = ref(false)
+const relatedTunes = ref([])
+const relatedTunesLoading = ref(false)
+const popularTunes = ref([])
+const popularTunesLoading = ref(false)
 const loading = ref(true)
 const notFound = ref(false)
 const loadError = ref('')
@@ -48,7 +53,15 @@ function applySeo(vData) {
     title: autoTitle,
     description: autoDesc,
     ogType: 'article',
-    jsonLd: makeVehicleSchema(vData),
+    jsonLd: [
+      makeVehicleSchema(vData),
+      makeProductSchema(vData),
+      makeBreadcrumbSchema([
+        { name: 'Home', url: window.location.origin },
+        { name: 'Vehicles', url: `${window.location.origin}/vehicles` },
+        { name: vData.name, url: `${window.location.origin}/vehicles/${vData.slug}` },
+      ]),
+    ],
     canonical: `${window.location.origin}/vehicles/${vData.slug}`,
   })
 }
@@ -65,6 +78,7 @@ async function findInLocalJson(targetSlug) {
       const candidate = v.slug || generateSlug(v.manufacturer, v.name, v.year)
       if (candidate === targetSlug) {
         return {
+          id: candidate,
           slug: candidate,
           name: v.name || '',
           manufacturer: v.manufacturer || '',
@@ -114,14 +128,8 @@ async function fetchVehicle() {
         else { tunes.value = tData || [] }
         tunesLoading.value = false
 
-        // Related vehicles
-        const { data: rData } = await supabase
-          .from('vehicles')
-          .select('*')
-          .neq('id', vData.id)
-          .or(`class.eq.${vData.class || ''},manufacturer.eq.${vData.manufacturer || ''}`)
-          .limit(4)
-        relatedVehicles.value = rData || []
+        // Related content
+        fetchAllRelated()
 
         applySeo(vData)
         fetchComments(vData.id)
@@ -147,6 +155,183 @@ async function fetchVehicle() {
   loading.value = false
 }
 
+async function fetchSimilarVehicles() {
+  if (!supabase || !vehicle.value) return
+  relatedVehiclesLoading.value = true
+  try {
+    const v = vehicle.value
+    let result = []
+    const skipIds = new Set([v.id])
+
+    // Priority 1: Same manufacturer
+    if (v.manufacturer) {
+      const { data } = await supabase
+        .from('vehicles')
+        .select('*')
+        .eq('manufacturer', v.manufacturer)
+        .neq('id', v.id)
+        .order('horsepower', { ascending: false })
+        .limit(8)
+      if (data) {
+        data.forEach(x => skipIds.add(x.id))
+        result = data
+      }
+    }
+
+    // Priority 2: Same drivetrain
+    if (result.length < 4 && v.drivetrain) {
+      const { data } = await supabase
+        .from('vehicles')
+        .select('*')
+        .eq('drivetrain', v.drivetrain)
+        .order('horsepower', { ascending: false })
+        .limit(8)
+      const extra = (data || []).filter(x => !skipIds.has(x.id))
+      extra.forEach(x => skipIds.add(x.id))
+      result = [...result, ...extra]
+    }
+
+    // Priority 3: Same class
+    if (result.length < 4 && v.class) {
+      const { data } = await supabase
+        .from('vehicles')
+        .select('*')
+        .eq('class', v.class)
+        .order('horsepower', { ascending: false })
+        .limit(8)
+      const extra = (data || []).filter(x => !skipIds.has(x.id))
+      result = [...result, ...extra]
+    }
+
+    relatedVehicles.value = result.slice(0, 4)
+  } catch {
+    relatedVehicles.value = []
+  } finally {
+    relatedVehiclesLoading.value = false
+  }
+}
+
+async function fetchRelatedTunes() {
+  if (!supabase || !vehicle.value) return
+  relatedTunesLoading.value = true
+  try {
+    const v = vehicle.value
+    const existingIds = new Set(tunes.value.map(t => t.id))
+    let result = []
+
+    // 1. Same vehicle_id (exclude already shown Community Tunes)
+    if (result.length < 6) {
+      const { data } = await supabase
+        .from('tunes_public')
+        .select('*')
+        .eq('vehicle_id', v.id)
+        .order('created_at', { ascending: false })
+        .limit(6)
+      const fresh = (data || []).filter(t => !existingIds.has(t.id))
+      result = fresh.slice(0, 6)
+    }
+
+    // 2. Same manufacturer
+    if (result.length < 6 && v.manufacturer) {
+      const { data: mfrVehicles } = await supabase
+        .from('vehicles')
+        .select('id')
+        .eq('manufacturer', v.manufacturer)
+        .neq('id', v.id)
+        .limit(10)
+      const mfrIds = (mfrVehicles || []).map(x => x.id)
+      if (mfrIds.length > 0) {
+        const skipIds = new Set([...existingIds, ...result.map(t => t.id)])
+        const { data: mfrTunes } = await supabase
+          .from('tunes_public')
+          .select('*')
+          .in('vehicle_id', mfrIds)
+          .order('created_at', { ascending: false })
+          .limit(6)
+        const extra = (mfrTunes || []).filter(t => !skipIds.has(t.id))
+        result = [...result, ...extra].slice(0, 6)
+      }
+    }
+
+    // 3. Same class
+    if (result.length < 6 && v.class) {
+      const { data: clsVehicles } = await supabase
+        .from('vehicles')
+        .select('id')
+        .eq('class', v.class)
+        .neq('id', v.id)
+        .neq('manufacturer', v.manufacturer)
+        .limit(10)
+      const clsIds = (clsVehicles || []).map(x => x.id)
+      if (clsIds.length > 0) {
+        const skipIds = new Set([...existingIds, ...result.map(t => t.id)])
+        const { data: clsTunes } = await supabase
+          .from('tunes_public')
+          .select('*')
+          .in('vehicle_id', clsIds)
+          .order('created_at', { ascending: false })
+          .limit(6)
+        const extra = (clsTunes || []).filter(t => !skipIds.has(t.id))
+        result = [...result, ...extra].slice(0, 6)
+      }
+    }
+
+    relatedTunes.value = result
+  } catch {
+    relatedTunes.value = []
+  } finally {
+    relatedTunesLoading.value = false
+  }
+}
+
+async function fetchPopularTunes() {
+  if (!supabase) return
+  popularTunesLoading.value = true
+  try {
+    const { data } = await supabase
+      .from('tunes_public')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(6)
+    popularTunes.value = data || []
+  } catch {
+    popularTunes.value = []
+  } finally {
+    popularTunesLoading.value = false
+  }
+}
+
+async function fetchAllRelated() {
+  await Promise.all([
+    fetchSimilarVehicles(),
+    fetchRelatedTunes(),
+    fetchPopularTunes(),
+  ])
+}
+
+// ── Related Guides (vehicle → guide cross-linking) ──
+import { getGuideBySlug } from '../data/guides.js'
+
+const relatedGuides = computed(() => {
+  if (!vehicle.value) return []
+  const v = vehicle.value
+  const slugs = new Set()
+
+  // Map drivetrain to guides
+  if (v.drivetrain === 'AWD') { slugs.add('how-to-tune-awd'); slugs.add('road-tuning-guide') }
+  if (v.drivetrain === 'RWD') { slugs.add('how-to-tune-rwd'); slugs.add('drift-tuning-guide') }
+  if (v.drivetrain === 'FWD') { slugs.add('how-to-fix-understeer') }
+
+  // Map class to guides
+  if (v.class && ['S1', 'S2'].includes(v.class)) slugs.add('road-tuning-guide')
+  if (v.class && ['B', 'A'].includes(v.class)) slugs.add('how-to-fix-understeer')
+
+  // For drift-heavy cars, add oversteer guide
+  if (v.drivetrain === 'RWD' && (v.horsepower || 0) > 400) slugs.add('how-to-fix-oversteer')
+
+  return [...slugs].map(s => getGuideBySlug(s)).filter(Boolean).slice(0, 4)
+})
+
 const favToggling = ref(false)
 
 async function handleToggleFavorite() {
@@ -154,10 +339,8 @@ async function handleToggleFavorite() {
   favToggling.value = true
   try {
     await toggleFavorite(vehicle.value.id)
-  } catch (e) {
-    if (e.message === 'Pro required') {
-      openProModal('Favorite tunes for quick access')
-    }
+  } catch {
+    // Login required or network error — silently ignored
   } finally {
     favToggling.value = false
   }
@@ -231,7 +414,7 @@ watch(slug, () => { fetchVehicle() })
         {{ t('nav.vehicles') }}
       </router-link>
 
-      <!-- ── Hero ── -->
+      <!-- ═══════════ Hero ═══════════ -->
       <div class="vd-hero liquid-panel">
         <div class="vd-hero-layout">
           <div v-if="vehicle.image_url" class="vd-hero-img-wrap">
@@ -244,42 +427,54 @@ watch(slug, () => { fetchVehicle() })
           <div class="vd-hero-body">
             <span class="vd-hero-manufacturer">{{ vehicle.manufacturer }}</span>
             <h1 class="vd-hero-name">{{ vehicle.name }}</h1>
-            <div class="vd-hero-tags">
-              <span v-if="vehicle.year" class="vd-tag liquid-glass">{{ vehicle.year }}</span>
-              <span v-if="vehicle.country" class="vd-tag liquid-glass">{{ vehicle.country }}</span>
-              <span v-if="vehicle.drivetrain" class="vd-tag liquid-glass">{{ vehicle.drivetrain }}</span>
-              <span v-if="vehicle.class" class="vd-tag liquid-glass">{{ vehicle.class }}</span>
+
+            <!-- Info Bar: Year · Country · Drivetrain · Class -->
+            <div class="vd-hero-infobar">
+              <span v-if="vehicle.year" class="vd-info-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                {{ vehicle.year }}
+              </span>
+              <span v-if="vehicle.country && vehicle.year" class="vd-info-divider">·</span>
+              <span v-if="vehicle.country" class="vd-info-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                {{ vehicle.country }}
+              </span>
+              <span v-if="vehicle.drivetrain && (vehicle.country || vehicle.year)" class="vd-info-divider">·</span>
+              <span v-if="vehicle.drivetrain" class="vd-info-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                {{ vehicle.drivetrain }}
+              </span>
             </div>
+
+            <!-- Favorite Button -->
             <div class="vd-hero-actions">
-              <button
-                v-if="!user"
-                class="vd-fav-btn vd-fav-login"
-                :title="t('vehicle.loginToSave')"
-                disabled
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              <!-- Not logged in → CTA panel -->
+              <div v-if="!user" class="vd-fav-cta">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
-                {{ t('vehicle.loginToSave') }}
-              </button>
+                {{ t('vehicle.loginToSaveFavorites') }}
+              </div>
+              <!-- Favorited -->
               <button
                 v-else-if="isFavorite(vehicle.id)"
                 class="vd-fav-btn vd-fav-saved"
                 :disabled="favToggling"
                 @click="handleToggleFavorite"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
                 {{ t('vehicle.saved') }}
               </button>
+              <!-- Not favorited -->
               <button
                 v-else
                 class="vd-fav-btn vd-fav-save"
                 :disabled="favToggling"
                 @click="handleToggleFavorite"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
                 {{ t('vehicle.save') }}
@@ -289,19 +484,42 @@ watch(slug, () => { fetchVehicle() })
         </div>
       </div>
 
-      <!-- ── Stats ── -->
-      <div class="vd-stats liquid-panel">
-        <div class="vd-stat" v-if="vehicle.horsepower">
-          <span class="vd-stat-value">{{ vehicle.horsepower }}</span>
-          <span class="vd-stat-label">HP</span>
+      <!-- ═══════════ Stats Cards ═══════════ -->
+      <section class="vd-section">
+        <h2 class="vd-section-title">{{ t('vehicle.statsTitle') }}</h2>
+        <div class="vd-stats-grid">
+          <div class="vd-stat-card glass-card-soft" v-if="vehicle.horsepower">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+            <span class="vd-stat-value">{{ vehicle.horsepower }}</span>
+            <span class="vd-stat-label">{{ t('vehicle.horsepower') }}</span>
+          </div>
+          <div class="vd-stat-card glass-card-soft" v-if="vehicle.weight">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="16" y1="8" x2="8" y2="8" /><line x1="16" y1="12" x2="8" y2="12" /><rect x="3" y="2" width="18" height="20" rx="3" ry="3" /><line x1="12" y1="16" x2="12" y2="20" />
+            </svg>
+            <span class="vd-stat-value">{{ vehicle.weight }}</span>
+            <span class="vd-stat-label">{{ t('vehicle.weight') }} (kg)</span>
+          </div>
+          <div class="vd-stat-card glass-card-soft" v-if="vehicle.drivetrain">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" /><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+            </svg>
+            <span class="vd-stat-value vd-stat-drivetrain">{{ vehicle.drivetrain }}</span>
+            <span class="vd-stat-label">{{ t('vehicle.drivetrain') }}</span>
+          </div>
+          <div class="vd-stat-card glass-card-soft" v-if="vehicle.class">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+            <span class="vd-stat-value vd-stat-class">{{ vehicle.class }}</span>
+            <span class="vd-stat-label">{{ t('vehicle.vehicleClass') }}</span>
+          </div>
         </div>
-        <div class="vd-stat" v-if="vehicle.weight">
-          <span class="vd-stat-value">{{ vehicle.weight }}</span>
-          <span class="vd-stat-label">kg</span>
-        </div>
-      </div>
+      </section>
 
-      <!-- ── Community Tunes ── -->
+      <!-- ═══════════ Community Tunes ═══════════ -->
       <section class="vd-section">
         <h2 class="vd-section-title">{{ t('vehicle.communityTunes') }}</h2>
 
@@ -326,22 +544,63 @@ watch(slug, () => { fetchVehicle() })
         </div>
       </section>
 
-      <!-- ── Comments ── -->
+      <!-- ═══════════ Related Tunes ═══════════ -->
+      <section v-if="relatedTunes.length > 0" class="vd-section">
+        <h2 class="vd-section-title">Related Tunes</h2>
+        <div v-if="relatedTunesLoading" class="vd-empty glass-card-white">
+          <span class="vd-empty-text">Loading related tunes...</span>
+        </div>
+        <div v-else class="vd-tunes-grid">
+          <TuneCard v-for="t in relatedTunes" :key="t.id" :tune="t" />
+        </div>
+      </section>
+
+      <!-- ═══════════ Similar Vehicles ═══════════ -->
+      <section v-if="relatedVehicles.length > 0" class="vd-section">
+        <h2 class="vd-section-title">{{ t('vehicle.similarVehicles') }}</h2>
+        <div v-if="relatedVehiclesLoading" class="vd-empty glass-card-white">
+          <span class="vd-empty-text">{{ t('vehicle.loadingSimilar') }}</span>
+        </div>
+        <div v-else class="vd-related-grid">
+          <VehicleCard v-for="rv in relatedVehicles" :key="rv.id" :vehicle="rv" />
+        </div>
+      </section>
+
+      <!-- ═══════════ Related Guides ═══════════ -->
+      <section v-if="relatedGuides.length > 0" class="vd-section">
+        <h2 class="vd-section-title">{{ t('guides.relatedGuides', 'Related Guides') }}</h2>
+        <div class="vd-guides-grid">
+          <router-link
+            v-for="rg in relatedGuides"
+            :key="rg.slug"
+            :to="`/guides/${rg.slug}`"
+            class="vd-guide-card glass-card-soft"
+          >
+            <span class="vd-guide-title">{{ rg.h1 }}</span>
+            <span class="vd-guide-desc">{{ rg.seoDescription }}</span>
+          </router-link>
+        </div>
+      </section>
+
+      <!-- ═══════════ Comments ═══════════ -->
       <section v-if="vehicle.id" class="vd-section">
         <h2 class="vd-section-title">{{ t('vehicle.comments') }}</h2>
 
-        <!-- Not logged in -->
-        <div v-if="!user" class="vc-login-hint liquid-panel">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-            <polyline points="10 17 15 12 10 7" />
-            <line x1="15" y1="12" x2="3" y2="12" />
-          </svg>
-          {{ t('vehicle.loginToComment') }}
+        <!-- Not logged in → prominent CTA panel -->
+        <div v-if="!user" class="vc-login-cta liquid-panel">
+          <div class="vc-login-cta-inner">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span>{{ t('vehicle.loginToComment') }}</span>
+          </div>
         </div>
 
-        <!-- Comment form -->
+        <!-- Comment form — only if logged in -->
         <div v-else class="vc-form liquid-panel">
+          <div class="vc-form-header">{{ t('vehicle.writeComment') }}</div>
           <textarea
             v-model="newComment"
             class="vc-textarea input-glass"
@@ -397,15 +656,18 @@ watch(slug, () => { fetchVehicle() })
         </div>
       </section>
 
-      <!-- ── Related Vehicles ── -->
-      <section v-if="relatedVehicles.length > 0" class="vd-section">
-        <h2 class="vd-section-title">Related Vehicles</h2>
-        <div class="vd-related-grid">
-          <VehicleCard v-for="rv in relatedVehicles" :key="rv.id" :vehicle="rv" />
+      <!-- ═══════════ Popular Community Tunes ═══════════ -->
+      <section v-if="popularTunes.length > 0" class="vd-section">
+        <h2 class="vd-section-title">Popular Community Tunes</h2>
+        <div v-if="popularTunesLoading" class="vd-empty glass-card-white">
+          <span class="vd-empty-text">Loading popular tunes...</span>
+        </div>
+        <div v-else class="vd-tunes-grid">
+          <TuneCard v-for="t in popularTunes" :key="t.id" :tune="t" />
         </div>
       </section>
 
-      <!-- ── About ── -->
+      <!-- ═══════════ About ═══════════ -->
       <section v-if="vehicle.description" class="vd-section">
         <h2 class="vd-section-title">About This Car</h2>
         <div class="vd-about liquid-panel">
@@ -510,18 +772,14 @@ watch(slug, () => { fetchVehicle() })
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 18px;
+  padding: 10px 22px;
   border-radius: 12px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #4a6b85;
-  background: rgba(255, 255, 255, 0.24);
-  backdrop-filter: blur(12px) saturate(155%);
-  -webkit-backdrop-filter: blur(12px) saturate(155%);
-  border: 1px solid rgba(255, 255, 255, 0.42);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 2px 8px rgba(0, 0, 0, 0.04);
+  font-size: 0.84rem;
+  font-weight: 620;
+  color: #fff;
+  background: #4a6b85;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 2px 12px rgba(63, 101, 135, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.24);
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
@@ -529,17 +787,12 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vd-back-link:hover {
-  background: rgba(255, 255, 255, 0.34);
-  border-color: rgba(255, 255, 255, 0.52);
+  background: #3d5c73;
   transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(63, 101, 135, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.30);
 }
 
-.vd-back-link:hover {
-  background: rgba(255, 255, 255, 0.35);
-  color: #2d4a63;
-}
-
-/* ── Hero ── */
+/* ═══════════ Hero ═══════════ */
 .vd-hero {
   padding: 28px;
   border-radius: 24px;
@@ -559,7 +812,7 @@ watch(slug, () => { fetchVehicle() })
   border-radius: 16px;
   overflow: hidden;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.38);
@@ -577,8 +830,9 @@ watch(slug, () => { fetchVehicle() })
 .vd-hero-body {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
+  flex: 1;
 }
 
 .vd-hero-manufacturer {
@@ -590,37 +844,92 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vd-hero-name {
-  font-size: 1.55rem;
+  font-size: 2rem;
   font-weight: 720;
   color: #111827;
   margin: 0;
-  line-height: 1.15;
-  letter-spacing: -0.015em;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
-.vd-hero-tags {
+/* ── Info Bar ── */
+.vd-hero-infobar {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 1px 6px rgba(0, 0, 0, 0.03);
+  font-size: 0.78rem;
+  font-weight: 580;
+  color: #374151;
 }
 
+.vd-info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.vd-info-item svg {
+  color: #5b7a9a;
+  flex-shrink: 0;
+}
+
+.vd-info-divider {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #c4cdd5;
+  margin: 0 1px;
+  user-select: none;
+}
+
+/* ── Favorite Actions ── */
 .vd-hero-actions {
-  margin-top: 6px;
+  margin-top: 4px;
+}
+
+.vd-fav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 580;
+  color: #4b5563;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+}
+
+.vd-fav-cta svg {
+  color: #6b859e;
+  flex-shrink: 0;
 }
 
 .vd-fav-btn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 9px 18px;
+  gap: 8px;
+  padding: 10px 22px;
   border-radius: 12px;
-  font-size: 0.78rem;
+  font-size: 0.84rem;
   font-weight: 620;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   font-family: inherit;
   border: 1px solid transparent;
-  min-height: 40px;
+  min-height: 44px;
 }
 
 .vd-fav-btn:disabled {
@@ -629,84 +938,88 @@ watch(slug, () => { fetchVehicle() })
   transform: none;
 }
 
-.vd-fav-login {
-  color: #6b7280;
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.30);
-  cursor: default;
-}
-
 .vd-fav-save {
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.30);
-  border-color: rgba(255, 255, 255, 0.40);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(255, 255, 255, 0.44);
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.44);
 }
 
 .vd-fav-save:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.42);
-  border-color: rgba(91, 122, 154, 0.35);
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(91, 122, 154, 0.38);
   color: #2d4a63;
   transform: translateY(-1px);
+  box-shadow:
+    0 3px 12px rgba(91, 122, 154, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.52);
 }
 
 .vd-fav-saved {
-  color: #b85b5b;
-  background: rgba(184, 91, 91, 0.08);
-  border-color: rgba(184, 91, 91, 0.16);
+  color: #fff;
+  background: linear-gradient(180deg, #c97272 0%, #b85b5b 50%, #a04a4a 100%);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 2px 10px rgba(184, 91, 91, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .vd-fav-saved:hover:not(:disabled) {
-  background: rgba(184, 91, 91, 0.14);
+  background: linear-gradient(180deg, #d47c7c 0%, #c26464 50%, #a85050 100%);
   transform: translateY(-1px);
+  box-shadow:
+    0 4px 16px rgba(184, 91, 91, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26);
 }
 
-.vd-tag {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #1f2937;
+/* ═══════════ Stats Cards ═══════════ */
+.vd-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
 }
 
-/* ── Stats ── */
-.vd-stats {
-  display: flex;
-  gap: 20px;
-  padding: 22px 28px;
-  border-radius: 18px;
-  position: relative;
-  z-index: 2;
-  flex-wrap: wrap;
-}
-
-.vd-stat {
+.vd-stat-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  flex: 1;
-  min-width: 80px;
+  gap: 9px;
+  padding: 22px 14px;
+  border-radius: 18px;
   position: relative;
   z-index: 2;
+  text-align: center;
+}
+
+.vd-stat-card svg {
+  color: #5b7a9a;
 }
 
 .vd-stat-value {
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 720;
   color: #111827;
   font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.vd-stat-drivetrain,
+.vd-stat-class {
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
 }
 
 .vd-stat-label {
-  font-size: 0.65rem;
+  font-size: 0.66rem;
   font-weight: 650;
   color: #6b859e;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-/* ── Sections ── */
+/* ═══════════ Sections ═══════════ */
 .vd-section {
   display: flex;
   flex-direction: column;
@@ -721,22 +1034,18 @@ watch(slug, () => { fetchVehicle() })
   letter-spacing: -0.01em;
 }
 
-.vd-section-link {
-  font-size: 0.75rem;
-  font-weight: 550;
-  color: #5b7a9a;
-  text-decoration: none;
-}
-
-.vd-section-link:hover {
-  color: #3d5c73;
-}
-
 /* ── Tunes grid ── */
 .vd-tunes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 12px;
+  gap: 14px;
+}
+
+/* ── Related grid ── */
+.vd-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
 }
 
 /* ── Empty ── */
@@ -757,20 +1066,27 @@ watch(slug, () => { fetchVehicle() })
   color: #4b5563;
 }
 
+/* ── White card (non-glass) ── */
+.glass-card-white {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
 .vd-empty-cta {
   padding: 9px 20px;
   border-radius: 10px;
   font-size: 0.80rem;
   font-weight: 600;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.30);
+  background: rgba(255, 255, 255, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.38);
   text-decoration: none;
   transition: all 0.15s ease;
 }
 
 .vd-empty-cta:hover {
-  background: rgba(255, 255, 255, 0.40);
+  background: rgba(255, 255, 255, 0.78);
   color: #2d4a63;
 }
 
@@ -790,40 +1106,57 @@ watch(slug, () => { fetchVehicle() })
   z-index: 2;
 }
 
-/* ── Comments ── */
-.vc-login-hint {
+/* ═══════════ Comments ═══════════ */
+.vc-login-cta {
+  padding: 22px 24px;
+  border-radius: 16px;
+}
+
+.vc-login-cta-inner {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 18px 22px;
-  border-radius: 14px;
-  font-size: 0.82rem;
-  font-weight: 550;
-  color: #4b5563;
+  gap: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.vc-login-cta-inner svg {
+  color: #5b7a9a;
+  flex-shrink: 0;
 }
 
 .vc-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 18px;
+  gap: 14px;
+  padding: 20px;
   border-radius: 16px;
 }
 
+.vc-form-header {
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: #4a6b85;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .vc-textarea {
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: 12px;
-  font-size: 0.85rem;
+  font-size: 0.90rem;
   color: #111827;
   font-family: inherit;
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px;
   width: 100%;
   line-height: 1.5;
 }
 
 .vc-textarea::placeholder {
   color: #9ca3af;
+  font-size: 0.85rem;
 }
 
 .vc-form-footer {
@@ -833,19 +1166,20 @@ watch(slug, () => { fetchVehicle() })
 }
 
 .vc-char-count {
-  font-size: 0.70rem;
+  font-size: 0.72rem;
   font-weight: 500;
   color: #6b7280;
 }
 
 .vc-post-btn {
-  padding: 9px 22px;
+  padding: 10px 24px;
   border-radius: 10px;
-  font-size: 0.80rem;
+  font-size: 0.82rem;
+  font-weight: 620;
 }
 
 .vc-post-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: default;
   transform: none;
 }
@@ -925,14 +1259,54 @@ watch(slug, () => { fetchVehicle() })
   border-color: rgba(184, 91, 91, 0.14);
 }
 
-/* ── Mobile ── */
+/* ── Related Guides ── */
+.vd-guides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.vd-guide-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.vd-guide-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.vd-guide-title {
+  font-size: 0.84rem;
+  font-weight: 660;
+  color: #000000;
+  line-height: 1.25;
+}
+
+.vd-guide-desc {
+  font-size: 0.72rem;
+  font-weight: 480;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+/* ═══════════ Mobile ═══════════ */
 @media (max-width: 640px) {
   .vd-page {
     padding: 16px;
     padding-bottom: 60px;
-    gap: 18px;
+    gap: 20px;
   }
 
+  /* ── Hero mobile ── */
   .vd-hero {
     padding: 20px;
     border-radius: 20px;
@@ -946,23 +1320,54 @@ watch(slug, () => { fetchVehicle() })
 
   .vd-hero-img-wrap {
     width: 100%;
-    height: 160px;
+    height: 180px;
   }
 
   .vd-hero-name {
-    font-size: 1.25rem;
+    font-size: 1.45rem;
   }
 
-  .vd-stats {
-    padding: 16px 18px;
-    gap: 12px;
-    justify-content: space-around;
+  .vd-hero-infobar {
+    gap: 2px;
+    padding: 8px 12px;
+    font-size: 0.72rem;
+  }
+
+  .vd-info-item {
+    padding: 2px 6px;
+  }
+
+  /* ── Stats: 2-col grid ── */
+  .vd-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .vd-stat-card {
+    padding: 18px 10px;
+    gap: 7px;
+    border-radius: 16px;
+  }
+
+  .vd-stat-card svg {
+    width: 18px;
+    height: 18px;
   }
 
   .vd-stat-value {
+    font-size: 1.25rem;
+  }
+
+  .vd-stat-drivetrain,
+  .vd-stat-class {
     font-size: 1rem;
   }
 
+  .vd-stat-label {
+    font-size: 0.62rem;
+  }
+
+  /* ── Grids: single column ── */
   .vd-tunes-grid {
     grid-template-columns: 1fr;
   }
@@ -971,8 +1376,45 @@ watch(slug, () => { fetchVehicle() })
     grid-template-columns: 1fr;
   }
 
+  .vd-guides-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Comments mobile ── */
+  .vc-login-cta {
+    padding: 18px 20px;
+  }
+
+  .vc-login-cta-inner {
+    font-size: 0.84rem;
+  }
+
+  .vc-form {
+    padding: 16px;
+  }
+
+  .vc-form-header {
+    font-size: 0.78rem;
+  }
+
+  .vc-textarea {
+    font-size: 0.84rem;
+    min-height: 90px;
+  }
+
+  .vc-post-btn {
+    padding: 9px 20px;
+    font-size: 0.78rem;
+  }
+
+  /* ── States mobile ── */
   .vd-state-card {
     padding: 36px 24px;
+  }
+
+  /* ── About mobile ── */
+  .vd-about {
+    padding: 18px 20px;
   }
 }
 </style>

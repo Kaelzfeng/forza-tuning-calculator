@@ -24,3 +24,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+
+# Local design/reference artifacts
+DESIGN_RULES.md
+design-reference/
+screenshots.mjs
+screenshots/
+
+# Duplicate root-level media assets
+KF_Logo.png
+logo_cartoon.mp4

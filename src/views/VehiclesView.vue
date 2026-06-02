@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '../lib/supabase.js'
 import VehicleCard from '../components/VehicleCard.vue'
-import { useSeoMeta, makeCollectionSchema } from '../composables/useSeoMeta.js'
+import { useSeoMeta, makeCollectionSchema, makeBreadcrumbSchema } from '../composables/useSeoMeta.js'
 import { generateSlug } from '../utils/slug.js'
 import { useI18n } from '../i18n/index.js'
 
@@ -21,25 +21,18 @@ const drivetrainFilter = ref(route.query.drivetrain || '')
 const classFilter = ref(route.query.class || '')
 
 // ── Pagination ──
-function getPageSize() {
-  return window.innerWidth <= 768 ? 12 : 24
-}
-const pageSize = ref(getPageSize())
-const visibleCount = ref(pageSize.value)
+const PAGE_SIZE = 50
+const visibleCount = ref(PAGE_SIZE)
 
 const visibleVehicles = computed(() => vehicles.value.slice(0, visibleCount.value))
 const hasMoreVehicles = computed(() => visibleCount.value < vehicles.value.length)
 
 function loadMore() {
-  visibleCount.value += pageSize.value
+  visibleCount.value += PAGE_SIZE
 }
 
 function resetPagination() {
-  visibleCount.value = pageSize.value
-}
-
-function onResize() {
-  pageSize.value = getPageSize()
+  visibleCount.value = PAGE_SIZE
 }
 
 const manufacturers = computed(() => {
@@ -61,7 +54,7 @@ async function fetchVehicles() {
       if (classFilter.value) query = query.eq('class', classFilter.value)
       if (search.value.trim()) {
         const term = `%${search.value.trim()}%`
-        query = query.or(`name.ilike.${term},manufacturer.ilike.${term}`)
+        query = query.or(`name.ilike.${term},manufacturer.ilike.${term},country.ilike.${term},class.ilike.${term},drivetrain.ilike.${term},year::text.ilike.${term}`)
       }
 
       const { data, error: fetchError } = await query
@@ -90,9 +83,15 @@ async function fetchVehicles() {
             const q = search.value.toLowerCase()
             const name = (v.name || '').toLowerCase()
             const mfr = (v.manufacturer || '').toLowerCase()
-            if (!name.includes(q) && !mfr.includes(q)) return false
+            const country = (v.country || '').toLowerCase()
+            const cls = (v.class || '').toLowerCase()
+            const dt = (v.drivetrain || '').toLowerCase()
+            const year = v.year != null ? String(v.year) : ''
+            if (!name.includes(q) && !mfr.includes(q) && !country.includes(q) && !cls.includes(q) && !dt.includes(q) && !year.includes(q)) return false
           }
           if (manufacturerFilter.value && v.manufacturer !== manufacturerFilter.value) return false
+          if (drivetrainFilter.value && v.drivetrain !== drivetrainFilter.value) return false
+          if (classFilter.value && v.class !== classFilter.value) return false
           return true
         })
         .map(v => ({
@@ -102,6 +101,7 @@ async function fetchVehicles() {
           year: v.year || null,
           drivetrain: v.drivetrain || null,
           class: v.class || null,
+          country: v.country || null,
           horsepower: v.horsepower || null,
           weight: v.weight || null,
           image_url: v.image_url || v.thumbnail_url || null,
@@ -154,19 +154,22 @@ watch([manufacturerFilter, drivetrainFilter, classFilter, search], () => {
 })
 
 onMounted(() => {
-  window.addEventListener('resize', onResize)
   useSeoMeta({
     title: 'Vehicle Tuning Database — Forza Tuning Calculator',
     description: 'Browse the complete Forza vehicle tuning database. Find community tunes for every car — Road, Drift, Drag, Dirt. Filter by manufacturer, drivetrain, and class.',
     ogType: 'website',
-    jsonLd: makeCollectionSchema('Vehicle Tuning Database', 'Browse the complete Forza vehicle tuning database.', window.location.href),
+    jsonLd: [
+      makeCollectionSchema('Vehicle Tuning Database', 'Browse the complete Forza vehicle tuning database.', window.location.href),
+      makeBreadcrumbSchema([
+        { name: 'Home', url: window.location.origin },
+        { name: 'Vehicles', url: window.location.href },
+      ]),
+    ],
   })
   fetchVehicles()
 })
 
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', onResize)
-})
+onBeforeUnmount(() => {})
 </script>
 
 <template>
@@ -225,7 +228,7 @@ onBeforeUnmount(() => {
 
     <!-- Loading -->
     <div v-if="loading" class="vp-grid">
-      <div v-for="n in pageSize" :key="n" class="vp-skeleton liquid-panel">
+      <div v-for="n in PAGE_SIZE" :key="n" class="vp-skeleton liquid-panel">
         <div class="sk-thumb"></div>
         <div class="sk-lines">
           <div class="sk-row sk-short"></div>
@@ -306,14 +309,14 @@ onBeforeUnmount(() => {
 .vp-title {
   font-size: 1.6rem;
   font-weight: 720;
-  color: #111827;
+  color: #000000;
   margin: 0;
   letter-spacing: -0.02em;
 }
 
 .vp-subtitle {
   font-size: 0.95rem;
-  color: #374151;
+  color: #111111;
   font-weight: 500;
   margin: 0;
   line-height: 1.5;
@@ -356,13 +359,13 @@ onBeforeUnmount(() => {
   border: none;
   background: transparent;
   font-size: 0.85rem;
-  color: #111827;
+  color: #000000;
   font-family: inherit;
   outline: none;
 }
 
 .vp-search-input::placeholder {
-  color: #6b7280;
+  color: #333333;
 }
 
 .vp-filter-select {
@@ -370,7 +373,7 @@ onBeforeUnmount(() => {
   min-height: 40px;
   border-radius: 10px;
   font-size: 0.78rem;
-  color: #111827;
+  color: #000000;
   font-family: inherit;
   font-weight: 550;
   appearance: none;
@@ -388,9 +391,11 @@ onBeforeUnmount(() => {
   border-radius: 10px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #4b5563;
-  background: rgba(255, 255, 255, 0.30);
-  border: 1px solid rgba(255, 255, 255, 0.38);
+  color: #000000;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.50);
   cursor: pointer;
   transition: all 0.15s ease;
   font-family: inherit;
@@ -398,8 +403,8 @@ onBeforeUnmount(() => {
 }
 
 .vp-clear-btn:hover {
-  background: rgba(255, 255, 255, 0.40);
-  color: #111827;
+  background: rgba(255, 255, 255, 0.84);
+  color: #000000;
 }
 
 /* ── Grid ── */
@@ -471,13 +476,13 @@ onBeforeUnmount(() => {
 .vp-state-title {
   font-size: 1.05rem;
   font-weight: 680;
-  color: #111827;
+  color: #000000;
   margin: 0;
 }
 
 .vp-state-desc {
   font-size: 0.85rem;
-  color: #374151;
+  color: #111111;
   font-weight: 500;
   margin: 0;
   line-height: 1.5;
@@ -489,8 +494,10 @@ onBeforeUnmount(() => {
   font-size: 0.82rem;
   font-weight: 600;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.30);
-  border: 1px solid rgba(255, 255, 255, 0.40);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.50);
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
@@ -498,7 +505,7 @@ onBeforeUnmount(() => {
 }
 
 .vp-retry-btn:hover {
-  background: rgba(255, 255, 255, 0.40);
+  background: rgba(255, 255, 255, 0.85);
   color: #2d4a63;
 }
 

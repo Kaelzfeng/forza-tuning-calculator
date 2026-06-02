@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://forzatune.com/sitemap.xml
+Sitemap: https://forzatuningcalculator.com/sitemap.xml

@@ -11,27 +11,7 @@ function handleClick() {
 </script>
 
 <template>
-  <button
-    v-if="!isPro"
-    class="upgrade-btn liquid-glass"
-    title="Upgrade to Pro"
-    @click="handleClick"
-  >
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="upgrade-icon">
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
-    Upgrade Pro
-  </button>
-  <span
-    v-else
-    class="pro-badge"
-    title="Your subscription is active"
-  >
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="pro-icon">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-    </svg>
-    Pro Active
-  </span>
+  <!-- Pro subscription not yet launched; button hidden for Beta -->
 </template>
 
 <style scoped>

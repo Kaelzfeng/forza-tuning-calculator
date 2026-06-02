@@ -38,12 +38,19 @@ export function useSeoMeta(config) {
   // -- Canonical --
   setLink('canonical', opts.canonical || window.location.href)
 
-  // -- JSON-LD --
+  // -- JSON-LD (supports single object or @graph array) --
   let jsonLdEl = null
   if (opts.jsonLd) {
     jsonLdEl = document.createElement('script')
     jsonLdEl.type = 'application/ld+json'
-    jsonLdEl.textContent = JSON.stringify(opts.jsonLd, null, 2)
+    if (Array.isArray(opts.jsonLd)) {
+      jsonLdEl.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': opts.jsonLd,
+      }, null, 2)
+    } else {
+      jsonLdEl.textContent = JSON.stringify(opts.jsonLd, null, 2)
+    }
     document.head.appendChild(jsonLdEl)
   }
 
@@ -146,3 +153,66 @@ export function makeCollectionSchema(name, description, url) {
     isPartOf: { '@type': 'WebSite', name: 'Forza Tuning Calculator', url: window.location.origin },
   }
 }
+
+/**
+ * Product schema for vehicle detail pages.
+ * Enhances SEO with price, brand, and structured properties.
+ */
+export function makeProductSchema(vehicle) {
+  const props = []
+  if (vehicle.horsepower) props.push({ '@type': 'PropertyValue', name: 'Horsepower', value: String(vehicle.horsepower) })
+  if (vehicle.weight) props.push({ '@type': 'PropertyValue', name: 'Weight (kg)', value: String(vehicle.weight) })
+  if (vehicle.drivetrain) props.push({ '@type': 'PropertyValue', name: 'Drivetrain', value: vehicle.drivetrain })
+  if (vehicle.class) props.push({ '@type': 'PropertyValue', name: 'Class', value: vehicle.class })
+  if (vehicle.year) props.push({ '@type': 'PropertyValue', name: 'Year', value: String(vehicle.year) })
+
+  return {
+    '@type': 'Product',
+    name: `${vehicle.manufacturer} ${vehicle.name}`,
+    brand: { '@type': 'Brand', name: vehicle.manufacturer },
+    description: vehicle.description || `${vehicle.manufacturer} ${vehicle.name} — ${vehicle.horsepower || 'N/A'} HP, ${vehicle.drivetrain || 'N/A'}, Class ${vehicle.class || 'N/A'}.`,
+    image: vehicle.image_url || vehicle.thumbnail_url || undefined,
+    category: vehicle.class ? `Forza ${vehicle.class} Class Vehicle` : 'Forza Vehicle',
+    ...(props.length > 0 ? { additionalProperty: props } : {}),
+  }
+}
+
+/**
+ * ItemList schema for ranking/list pages.
+ * Each item must have { name, url }.
+ */
+export function makeItemListSchema(listName, description, items, itemCount) {
+  return {
+    '@type': 'ItemList',
+    name: listName,
+    description,
+    numberOfItems: itemCount || items.length,
+    itemListElement: items.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      url: item.url,
+      ...(item.image ? { image: item.image } : {}),
+    })),
+  }
+}
+
+/**
+ * SoftwareApplication schema for the Calculator page.
+ */
+export function makeSoftwareAppSchema() {
+  return {
+    '@type': 'SoftwareApplication',
+    name: 'Forza Tuning Calculator',
+    applicationCategory: 'GameApplication',
+    operatingSystem: 'Web',
+    description: 'Free Forza tuning calculator generating suspension, differential, gearing, and tire pressure setups for Road, Drift, Dirt, and Drag builds.',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    author: { '@type': 'Organization', name: 'Forza Tuning Calculator' },
+  }
+}
+
+/**
+ * Convenience: BreadcrumbList from simple [{name, url}] pairs.
+ * Already exported above — kept for backward compatibility.
+ */

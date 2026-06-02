@@ -100,7 +100,7 @@ const { t } = useI18n()
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: #111111;
+  color: #000000;
   text-decoration: none;
   position: relative;
   z-index: 2;
@@ -126,28 +126,28 @@ const { t } = useI18n()
   border-radius: 12px;
   font-size: 0.85rem;
   font-weight: 550;
-  color: #222222;
+  color: #000000;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .nav-link:hover {
-  color: #111111;
-  background: rgba(255, 255, 255, 0.32);
+  color: #000000;
+  background: rgba(255, 255, 255, 0.38);
   backdrop-filter: blur(22px) saturate(180%);
   -webkit-backdrop-filter: blur(22px) saturate(180%);
 }
 
 .nav-link.active {
-  color: #111111;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.28));
+  color: #000000;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.36));
   backdrop-filter: blur(24px) saturate(190%);
   -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.50);
+  border: 1px solid rgba(255, 255, 255, 0.58);
   box-shadow:
     0 3px 14px rgba(0, 0, 0, 0.07),
     0 0 0 1px rgba(255, 255, 255, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.58);
+    inset 0 1px 0 rgba(255, 255, 255, 0.60);
 }
 
 .nav-actions {
@@ -181,7 +181,7 @@ const { t } = useI18n()
 .footer-name {
   font-size: 0.9rem;
   font-weight: 650;
-  color: #111111;
+  color: #000000;
   margin: 0 0 8px;
   position: relative;
   z-index: 2;
@@ -190,7 +190,7 @@ const { t } = useI18n()
 .footer-disclaimer {
   font-size: 0.78rem;
   line-height: 1.6;
-  color: #333333;
+  color: #222222;
   font-weight: 500;
   margin: 0;
   max-width: 520px;

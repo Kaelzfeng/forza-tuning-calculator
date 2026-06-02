@@ -517,15 +517,15 @@ function formatDate(iso) {
   font-size: 0.82rem;
   font-weight: 600;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.50);
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
 }
 
 .td-back-link:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.84);
   color: #2d4a63;
 }
 
@@ -674,7 +674,7 @@ function formatDate(iso) {
   font-size: 0.8rem;
   font-weight: 600;
   color: #333333;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.36);
@@ -683,9 +683,9 @@ function formatDate(iso) {
 }
 
 .td-del-cancel:hover {
-  background: rgba(255, 255, 255, 0.34);
-  border-color: rgba(255, 255, 255, 0.48);
-  color: #222222;
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(255, 255, 255, 0.58);
+  color: #111111;
 }
 
 .td-del-confirm {
@@ -805,7 +805,7 @@ function formatDate(iso) {
   z-index: 2;
   padding: 20px 22px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.36);
@@ -878,7 +878,7 @@ function formatDate(iso) {
   gap: 8px;
   padding: 16px 18px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(12px) saturate(155%);
   -webkit-backdrop-filter: blur(12px) saturate(155%);
   border: 1px solid rgba(255, 255, 255, 0.34);
@@ -1067,7 +1067,7 @@ function formatDate(iso) {
 }
 
 .step-group:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .step-number {
@@ -1075,8 +1075,8 @@ function formatDate(iso) {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1120,7 +1120,7 @@ function formatDate(iso) {
   font-weight: 600;
   font-family: inherit;
   color: #4a6b85;
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.78);
   backdrop-filter: blur(14px) saturate(165%);
   -webkit-backdrop-filter: blur(14px) saturate(165%);
   border: 1px solid rgba(255, 255, 255, 0.48);
@@ -1133,8 +1133,8 @@ function formatDate(iso) {
 
 .btn-copy:hover {
   color: #3d5c73;
-  background: rgba(255, 255, 255, 0.40);
-  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(255, 255, 255, 0.62);
   box-shadow: 0 3px 16px rgba(91, 122, 154, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.64);
   transform: translateY(-1px);
 }

@@ -1,14 +1,12 @@
 import { ref, watch, onMounted } from 'vue'
 import { supabase } from '../lib/supabase.js'
 import { useAuth } from './useAuth.js'
-import { useProAccess } from './useProAccess.js'
 
 const favoriteIds = ref(new Set())
 const loading = ref(false)
 
 export function useFavorites() {
   const { user } = useAuth()
-  const { isPro } = useProAccess()
 
   async function fetchFavorites() {
     if (!supabase || !user.value) {
@@ -41,9 +39,6 @@ export function useFavorites() {
     if (!supabase) return
     if (!user.value) {
       throw new Error('Login required')
-    }
-    if (!isPro.value) {
-      throw new Error('Pro required')
     }
 
     const favourited = favoriteIds.value.has(vehicleId)
